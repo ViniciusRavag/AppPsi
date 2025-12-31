@@ -1,0 +1,727 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Clareza Mental | Psi. Vinicius Ravagnani</title>
+    
+    <!-- React & ReactDOM -->
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    
+    <!-- Babel -->
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <!-- Google Fonts: Merriweather (Autoridade/Conforto) e Lato (Legibilidade) -->
+    <link href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&family=Merriweather:ital,wght@0,300;0,400;0,700;0,900;1,300&display=swap" rel="stylesheet">
+
+    <!-- Configuração do Tailwind com cores personalizadas -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Lato', 'sans-serif'],
+                        serif: ['Merriweather', 'serif'],
+                    },
+                    colors: {
+                        paper: '#fdfbf7', // Cor de papel off-white
+                        primary: {
+                            50: '#f0f9ff',
+                            100: '#e0f2fe',
+                            500: '#0e7490', // Cyan-700 / Teal escuro
+                            600: '#0891b2',
+                            700: '#0e7490',
+                            800: '#155e75',
+                            900: '#164e63',
+                        },
+                        stone: {
+                            50: '#fafaf9',
+                            100: '#f5f5f4',
+                            200: '#e7e5e4',
+                            800: '#292524', // Texto principal suave
+                        }
+                    },
+                    boxShadow: {
+                        'soft': '0 4px 20px -2px rgba(0, 0, 0, 0.05)',
+                        'card': '0 10px 30px -5px rgba(0, 0, 0, 0.08)',
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            background-color: #fdfbf7;
+            color: #292524;
+            font-family: 'Lato', sans-serif;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* Utilitários de Animação */
+        .fade-in { animation: fadeIn 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+        .slide-up { animation: slideUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+        
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        @keyframes slideUp { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* Custom Range Slider */
+        input[type=range] {
+            -webkit-appearance: none;
+            width: 100%;
+            background: transparent;
+        }
+        input[type=range]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            height: 28px;
+            width: 28px;
+            border-radius: 50%;
+            background: #0e7490;
+            border: 4px solid #fff;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+            margin-top: -12px;
+            cursor: pointer;
+            transition: transform 0.1s;
+        }
+        input[type=range]::-webkit-slider-thumb:hover { transform: scale(1.1); }
+        input[type=range]::-webkit-slider-runnable-track {
+            width: 100%;
+            height: 4px;
+            background: #e7e5e4;
+            border-radius: 999px;
+        }
+        input[type=range]:focus { outline: none; }
+
+        /* Scrollbar elegante */
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #d6d3d1; border-radius: 10px; }
+        ::-webkit-scrollbar-thumb:hover { background: #a8a29e; }
+    </style>
+</head>
+<body>
+    <div id="root"></div>
+
+    <script type="text/babel">
+        /* * ==========================================
+         * FIREBASE SETUP (PREPARAÇÃO)
+         * ==========================================
+         * Para ativar o Firebase futuramente:
+         * 1. Descomente as importações abaixo.
+         * 2. Preencha firebaseConfig com suas chaves.
+         * 3. Altere o hook useAuth para usar onAuthStateChanged.
+         */
+
+        // import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js";
+        // import { getAuth, onAuthStateChanged, signInAnonymously } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-auth.js";
+        // import { getFirestore, collection, addDoc, query, where, getDocs, orderBy } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js";
+
+        // const firebaseConfig = {
+        //   apiKey: "SUA_API_KEY",
+        //   authDomain: "SEU_PROJETO.firebaseapp.com",
+        //   projectId: "SEU_PROJETO",
+        //   storageBucket: "SEU_PROJETO.appspot.com",
+        //   messagingSenderId: "NUMERO",
+        //   appId: "ID"
+        // };
+
+        // const app = initializeApp(firebaseConfig);
+        // const auth = getAuth(app);
+        // const db = getFirestore(app);
+
+        const { useState, useEffect, useRef } = React;
+
+        // --- DADOS E CONSTANTES ---
+        
+        const EMOTIONS = [
+            { id: 'ansioso', label: 'Ansiedade', color: 'bg-amber-50 text-amber-800 border-amber-200 ring-amber-100', icon: 'zap' },
+            { id: 'triste', label: 'Tristeza', color: 'bg-indigo-50 text-indigo-800 border-indigo-200 ring-indigo-100', icon: 'cloud-rain' },
+            { id: 'irritado', label: 'Raiva', color: 'bg-rose-50 text-rose-800 border-rose-200 ring-rose-100', icon: 'flame' },
+            { id: 'culpa', label: 'Culpa', color: 'bg-violet-50 text-violet-800 border-violet-200 ring-violet-100', icon: 'alert-circle' },
+            { id: 'neutro', label: 'Confuso', color: 'bg-stone-100 text-stone-600 border-stone-200 ring-stone-100', icon: 'help-circle' }
+        ];
+
+        const STRATEGIES = [
+            {
+                id: 'investigator',
+                title: 'O Investigador',
+                subtitle: 'Análise de Evidências',
+                desc: 'Vamos olhar para os fatos frios. O que é real e o que é suposição?',
+                icon: 'search',
+                questions: [
+                    'Quais fatos REAIS comprovam que esse pensamento é 100% verdadeiro?',
+                    'Existem fatos que mostram o contrário? (Seja honesto)',
+                    'Conclusão baseada apenas nos fatos:'
+                ]
+            },
+            {
+                id: 'friend',
+                title: 'Conselho de Amigo',
+                subtitle: 'Autocompaixão',
+                desc: 'Saia de dentro da sua cabeça e imagine ajudar alguém que você ama.',
+                icon: 'heart-handshake',
+                questions: [
+                    'Se seu melhor amigo estivesse nessa situação, o que você diria para ele?',
+                    'Por que você está sendo mais duro com você mesmo?',
+                    'Reescreva o pensamento com mais gentileza:'
+                ]
+            },
+            {
+                id: 'perspective',
+                title: 'O Realista',
+                subtitle: 'Descatastrofização',
+                desc: 'Vamos acalmar o cenário de catástrofe.',
+                icon: 'scale',
+                questions: [
+                    'Qual é a PIOR coisa que pode acontecer? Você sobreviveria a isso?',
+                    'Qual é a MELHOR coisa que pode acontecer?',
+                    'O que é o mais PROVÁVEL de acontecer?'
+                ]
+            }
+        ];
+
+        // --- COMPONENTES UI (DESIGN SYSTEM) ---
+
+        const Icon = ({ name, size = 20, className = "" }) => {
+            useEffect(() => { if (window.lucide) window.lucide.createIcons(); }, [name]);
+            return <i data-lucide={name} width={size} height={size} className={className}></i>;
+        };
+
+        const Button = ({ children, onClick, variant = 'primary', className = "", disabled = false, fullWidth = true }) => {
+            const base = "py-4 px-6 rounded-xl font-sans font-bold transition-all duration-300 transform active:scale-[0.98] flex items-center justify-center gap-3";
+            const variants = {
+                primary: "bg-primary-800 text-white hover:bg-primary-900 shadow-lg shadow-primary-900/20 disabled:opacity-50 disabled:shadow-none",
+                secondary: "bg-white border border-stone-200 text-stone-600 hover:border-primary-500 hover:text-primary-700 shadow-sm",
+                ghost: "bg-transparent text-stone-500 hover:text-primary-700 hover:bg-primary-50/50",
+                success: "bg-emerald-700 text-white hover:bg-emerald-800 shadow-lg shadow-emerald-900/20"
+            };
+            return (
+                <button 
+                    onClick={onClick} 
+                    disabled={disabled}
+                    className={`${base} ${variants[variant]} ${fullWidth ? 'w-full' : ''} ${className}`}
+                >
+                    {children}
+                </button>
+            );
+        };
+
+        const Card = ({ children, className = "" }) => (
+            <div className={`bg-white rounded-2xl shadow-soft border border-stone-100 p-6 ${className} fade-in`}>
+                {children}
+            </div>
+        );
+
+        const ProgressBar = ({ current, total }) => (
+            <div className="w-full bg-stone-200 h-1.5 rounded-full mb-8 overflow-hidden">
+                <div 
+                    className="bg-primary-700 h-full transition-all duration-700 ease-in-out shadow-[0_0_10px_rgba(14,116,144,0.5)]" 
+                    style={{ width: `${(current / total) * 100}%` }}
+                ></div>
+            </div>
+        );
+
+        // --- SERVIÇO DE DADOS (MOCK FIREBASE) ---
+        // Esta camada facilita a troca para o Firebase real depois
+
+        const DataService = {
+            saveEntry: async (entry) => {
+                // SIMULANDO FIREBASE: await addDoc(collection(db, "entries"), entry);
+                const existing = JSON.parse(localStorage.getItem('clareza_entries') || '[]');
+                const newEntries = [entry, ...existing];
+                localStorage.setItem('clareza_entries', JSON.stringify(newEntries));
+                return newEntries;
+            },
+            getEntries: async () => {
+                // SIMULANDO FIREBASE: consulta ao Firestore
+                return JSON.parse(localStorage.getItem('clareza_entries') || '[]');
+            }
+        };
+
+        // --- APLICAÇÃO ---
+
+        const App = () => {
+            const [view, setView] = useState('home');
+            const [entries, setEntries] = useState([]);
+            const [currentEntry, setCurrentEntry] = useState({});
+            const [step, setStep] = useState(0);
+
+            useEffect(() => {
+                DataService.getEntries().then(setEntries);
+                if (window.lucide) window.lucide.createIcons();
+            }, []);
+
+            const startNewEntry = () => {
+                setCurrentEntry({
+                    id: Date.now().toString(), // No Firebase isso seria gerado auto
+                    date: new Date().toISOString(),
+                    situation: '',
+                    emotion: null,
+                    emotionIntensity: 50,
+                    thought: '',
+                    thoughtBelief: 80,
+                    strategy: null,
+                    strategyAnswers: {},
+                    balancedThought: '',
+                    finalEmotion: 50
+                });
+                setStep(1);
+                setView('entry');
+            };
+
+            const handleNext = (data) => {
+                setCurrentEntry(prev => ({ ...prev, ...data }));
+                setStep(prev => prev + 1);
+            };
+
+            const handleFinish = async (finalData) => {
+                const completeEntry = { ...currentEntry, ...finalData };
+                const updatedList = await DataService.saveEntry(completeEntry);
+                setEntries(updatedList);
+                setView('history');
+            };
+
+            const exportData = () => {
+                const dataStr = JSON.stringify(entries);
+                const encoded = btoa(unescape(encodeURIComponent(dataStr)));
+                navigator.clipboard.writeText(encoded);
+                alert("Dados copiados com segurança. Cole na mensagem para o Dr. Vinicius.");
+            };
+
+            // Router simples
+            if (view === 'home') return <HomeView onStart={startNewEntry} onHistory={() => setView('history')} hasEntries={entries.length > 0} />;
+            if (view === 'history') return <HistoryView entries={entries} onBack={() => setView('home')} onExport={exportData} />;
+            if (view === 'entry') return <WizardController step={step} data={currentEntry} onNext={handleNext} onFinish={handleFinish} onCancel={() => setView('home')} />;
+            
+            return null;
+        };
+
+        // --- TELA INICIAL (Home) ---
+
+        const HomeView = ({ onStart, onHistory, hasEntries }) => (
+            <div className="min-h-screen flex flex-col relative overflow-hidden">
+                {/* Background Decorativo */}
+                <div className="absolute top-0 left-0 w-full h-64 bg-gradient-to-b from-primary-900 to-primary-800 z-0"></div>
+                <div className="absolute top-0 left-0 w-full h-64 bg-[url('https://images.unsplash.com/photo-1499728603963-1dcc58a1f944?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=20')] opacity-20 mix-blend-overlay z-0 bg-cover bg-center"></div>
+                
+                <div className="relative z-10 flex-1 flex flex-col max-w-md mx-auto w-full p-6 pt-12">
+                    
+                    {/* Header do Profissional */}
+                    <div className="bg-white/95 backdrop-blur-md rounded-2xl p-6 shadow-card mb-8 border border-white/50 slide-up">
+                        <div className="flex items-center gap-4 mb-4">
+                            <div className="w-16 h-16 rounded-full bg-stone-200 border-2 border-white shadow-md flex items-center justify-center overflow-hidden shrink-0">
+                                {/* Placeholder para foto do psicólogo */}
+                                <Icon name="user" size={32} className="text-stone-400" />
+                            </div>
+                            <div>
+                                <h2 className="text-sm font-bold text-primary-700 tracking-wide uppercase mb-0.5">Psicólogo Clínico</h2>
+                                <h1 className="font-serif text-xl font-bold text-stone-800">Vinicius Ravagnani</h1>
+                                <p className="text-xs text-stone-500">CRP 06/XXXXX</p>
+                            </div>
+                        </div>
+                        <p className="text-stone-600 text-sm leading-relaxed border-t border-stone-100 pt-4 italic font-serif">
+                            "Bem-vindo ao seu espaço seguro. Use esta ferramenta para organizar o caos mental e encontrar novas perspectivas entre nossas sessões."
+                        </p>
+                    </div>
+
+                    {/* Área de Ação */}
+                    <div className="space-y-6 slide-up" style={{ animationDelay: '0.1s' }}>
+                        <div className="text-center mb-8">
+                            <h3 className="font-serif text-3xl font-bold text-stone-800 mb-2">Clareza Mental</h3>
+                            <p className="text-stone-500 font-light">Diário Cognitivo Comportamental</p>
+                        </div>
+
+                        <Button onClick={onStart} className="text-lg py-5 shadow-xl shadow-primary-900/10">
+                            <Icon name="pen-tool" /> Registrar Pensamento
+                        </Button>
+                        
+                        {hasEntries && (
+                            <Button variant="secondary" onClick={onHistory}>
+                                <Icon name="book-open" /> Consultar Diário
+                            </Button>
+                        )}
+                    </div>
+
+                    <div className="mt-auto pt-10 text-center pb-6 opacity-60">
+                         <p className="text-xs text-stone-400 flex items-center justify-center gap-1">
+                            <Icon name="lock" size={10} /> Seus dados são armazenados localmente e criptografados.
+                         </p>
+                    </div>
+                </div>
+            </div>
+        );
+
+        // --- HISTÓRICO ---
+
+        const HistoryView = ({ entries, onBack, onExport }) => (
+            <div className="min-h-screen bg-stone-50 flex flex-col">
+                <header className="sticky top-0 bg-white/80 backdrop-blur-lg border-b border-stone-100 z-20 px-6 py-4 flex justify-between items-center">
+                    <button onClick={onBack} className="p-2 -ml-2 text-stone-400 hover:text-primary-700 transition-colors">
+                        <Icon name="arrow-left" />
+                    </button>
+                    <span className="font-serif font-bold text-stone-700">Seu Progresso</span>
+                    <div className="w-8"></div>
+                </header>
+
+                <div className="flex-1 max-w-xl mx-auto w-full p-6 space-y-6">
+                    {entries.length === 0 && (
+                        <div className="text-center py-20 opacity-50">
+                            <Icon name="feather" size={48} className="mx-auto mb-4 text-stone-300" />
+                            <p className="font-serif text-stone-400">O diário está em branco.</p>
+                        </div>
+                    )}
+
+                    {entries.map(entry => {
+                        const emo = EMOTIONS.find(e => e.id === entry.emotion?.id);
+                        return (
+                            <div key={entry.id} className="bg-white rounded-xl shadow-sm border border-stone-100 overflow-hidden group hover:shadow-md transition-shadow duration-300">
+                                <div className="p-5">
+                                    <div className="flex justify-between items-start mb-3">
+                                        <span className="text-xs font-bold text-stone-400 font-sans tracking-wider">
+                                            {new Date(entry.date).toLocaleDateString('pt-BR', { weekday: 'short', day: '2-digit', month: 'short' })}
+                                        </span>
+                                        {emo && (
+                                            <span className={`text-xs px-2 py-0.5 rounded-full border flex items-center gap-1 ${emo.color}`}>
+                                                <Icon name={emo.icon} size={10} /> {emo.label}
+                                            </span>
+                                        )}
+                                    </div>
+                                    <h3 className="font-serif font-bold text-stone-800 mb-2">{entry.situation}</h3>
+                                    <div className="pl-3 border-l-2 border-primary-100 my-3">
+                                        <p className="text-sm text-stone-500 italic">"{entry.thought}"</p>
+                                    </div>
+                                    
+                                    {entry.balancedThought && (
+                                        <div className="bg-emerald-50/50 rounded-lg p-3 mt-4 border border-emerald-100/50">
+                                            <p className="text-xs text-emerald-700 font-bold mb-1 flex items-center gap-1.5">
+                                                <Icon name="check-circle" size={12} /> Reestruturação
+                                            </p>
+                                            <p className="text-sm text-stone-700">{entry.balancedThought}</p>
+                                        </div>
+                                    )}
+                                </div>
+                            </div>
+                        );
+                    })}
+                </div>
+
+                <div className="p-6 bg-white border-t border-stone-100 text-center">
+                    <Button variant="ghost" onClick={onExport} className="text-xs font-normal border border-dashed border-stone-300">
+                        <Icon name="share" size={14} /> Exportar dados para Terapia
+                    </Button>
+                </div>
+            </div>
+        );
+
+        // --- WIZARD CONTROLLER ---
+
+        const WizardController = ({ step, data, onNext, onFinish, onCancel }) => {
+            const steps = [
+                { title: 'A Situação', comp: StepSituation },
+                { title: 'A Emoção', comp: StepEmotion },
+                { title: 'O Pensamento', comp: StepThought },
+                { title: 'Desafiando', comp: StepChallenge },
+                { title: 'Reestruturando', comp: StepReframe },
+            ];
+
+            const CurrentComp = steps[step - 1]?.comp;
+
+            return (
+                <div className="min-h-screen bg-paper flex flex-col">
+                    <div className="max-w-xl mx-auto w-full h-full flex flex-col flex-1">
+                        <div className="p-6 pb-2">
+                            <div className="flex justify-between items-center mb-6">
+                                <button onClick={onCancel} className="text-stone-400 hover:text-stone-600 transition-colors">
+                                    <Icon name="x" size={24} />
+                                </button>
+                                <span className="text-xs font-bold text-primary-700 tracking-widest uppercase bg-primary-50 px-3 py-1 rounded-full">
+                                    {steps[step-1].title}
+                                </span>
+                                <div className="w-6"></div>
+                            </div>
+                            <ProgressBar current={step} total={5} />
+                        </div>
+
+                        <div className="flex-1 px-6 pb-8 overflow-y-auto">
+                            {CurrentComp && <CurrentComp data={data} onNext={onNext} onFinish={onFinish} />}
+                        </div>
+                    </div>
+                </div>
+            );
+        };
+
+        // --- ETAPAS DO WIZARD ---
+
+        const StepSituation = ({ onNext }) => {
+            const [text, setText] = useState('');
+            return (
+                <div className="slide-up flex flex-col h-full">
+                    <div className="flex-1">
+                        <h2 className="text-3xl font-serif font-bold text-stone-800 mb-3">O que aconteceu?</h2>
+                        <p className="text-stone-500 mb-8 leading-relaxed">Descreva o evento gatilho. Onde você estava? O que estava fazendo? Seja objetivo como uma câmera filmando.</p>
+                        
+                        <textarea 
+                            className="w-full h-48 p-6 rounded-xl bg-white border border-stone-200 focus:border-primary-500 focus:ring-4 focus:ring-primary-100 outline-none transition-all text-stone-700 text-lg leading-relaxed shadow-inner resize-none font-serif placeholder:font-sans"
+                            placeholder="Ex: Estava na cozinha preparando o café da manhã quando recebi uma mensagem..."
+                            value={text}
+                            onChange={e => setText(e.target.value)}
+                            autoFocus
+                        ></textarea>
+                    </div>
+                    <div className="pt-6">
+                        <Button onClick={() => onNext({ situation: text })} disabled={text.length < 3}>
+                            Continuar <Icon name="arrow-right" size={18} />
+                        </Button>
+                    </div>
+                </div>
+            );
+        };
+
+        const StepEmotion = ({ onNext }) => {
+            const [selected, setSelected] = useState(null);
+            const [intensity, setIntensity] = useState(50);
+
+            return (
+                <div className="slide-up flex flex-col h-full">
+                    <div className="flex-1">
+                        <h2 className="text-3xl font-serif font-bold text-stone-800 mb-3">Como se sentiu?</h2>
+                        <p className="text-stone-500 mb-6">Identifique a emoção predominante no momento.</p>
+
+                        <div className="grid grid-cols-2 gap-4 mb-8">
+                            {EMOTIONS.map(emo => (
+                                <button
+                                    key={emo.id}
+                                    onClick={() => setSelected(emo)}
+                                    className={`relative p-4 rounded-xl border transition-all duration-300 text-left group overflow-hidden ${
+                                        selected?.id === emo.id 
+                                        ? `${emo.color} ring-2 ring-offset-2 ring-offset-paper shadow-md scale-[1.02]` 
+                                        : 'bg-white border-stone-100 text-stone-500 hover:border-primary-200 hover:bg-stone-50'
+                                    }`}
+                                >
+                                    <div className="flex justify-between items-start mb-2">
+                                        <Icon name={emo.icon} size={24} className={selected?.id === emo.id ? 'opacity-100' : 'opacity-50 group-hover:opacity-80'} />
+                                        {selected?.id === emo.id && <div className="w-2 h-2 rounded-full bg-current animate-pulse"></div>}
+                                    </div>
+                                    <span className="font-bold block">{emo.label}</span>
+                                </button>
+                            ))}
+                        </div>
+
+                        {selected && (
+                            <div className="bg-white p-6 rounded-2xl border border-stone-100 shadow-soft fade-in">
+                                <div className="flex justify-between items-baseline mb-4">
+                                    <label className="text-sm font-bold text-stone-600 uppercase tracking-wide">Intensidade</label>
+                                    <span className="text-2xl font-serif font-bold text-primary-700">{intensity}%</span>
+                                </div>
+                                <input 
+                                    type="range" 
+                                    min="0" max="100" 
+                                    value={intensity} 
+                                    onChange={(e) => setIntensity(parseInt(e.target.value))}
+                                />
+                                <div className="flex justify-between text-xs text-stone-400 mt-2 font-medium">
+                                    <span>Leve</span>
+                                    <span>Moderada</span>
+                                    <span>Intensa</span>
+                                </div>
+                            </div>
+                        )}
+                    </div>
+                    <div className="pt-6">
+                        <Button onClick={() => onNext({ emotion: selected, emotionIntensity: intensity })} disabled={!selected}>
+                            Continuar <Icon name="arrow-right" size={18} />
+                        </Button>
+                    </div>
+                </div>
+            );
+        };
+
+        const StepThought = ({ onNext }) => {
+            const [thought, setThought] = useState('');
+            const [belief, setBelief] = useState(80);
+
+            return (
+                <div className="slide-up flex flex-col h-full">
+                    <div className="flex-1">
+                        <h2 className="text-3xl font-serif font-bold text-stone-800 mb-3">O que você pensou?</h2>
+                        <p className="text-stone-500 mb-8">Pensamentos automáticos surgem rápido. Tente capturar a frase exata que passou pela sua mente.</p>
+
+                        <div className="relative">
+                            <Icon name="message-circle" className="absolute top-4 left-4 text-stone-300" />
+                            <textarea 
+                                className="w-full h-40 p-4 pl-12 rounded-xl bg-white border border-stone-200 focus:border-primary-500 focus:ring-4 focus:ring-primary-100 outline-none transition-all text-stone-700 text-lg shadow-sm resize-none font-serif italic"
+                                placeholder='"Eu sou um fracasso...", "Isso vai dar tudo errado..."'
+                                value={thought}
+                                onChange={e => setThought(e.target.value)}
+                            ></textarea>
+                        </div>
+
+                        {thought.length > 5 && (
+                            <div className="mt-8 bg-stone-50 p-6 rounded-2xl border border-stone-100 fade-in">
+                                <div className="flex justify-between items-baseline mb-4">
+                                    <label className="text-sm font-bold text-stone-600">Grau de Crença</label>
+                                    <span className="text-2xl font-serif font-bold text-primary-700">{belief}%</span>
+                                </div>
+                                <p className="text-xs text-stone-400 mb-4">Quanto você acredita que isso é uma verdade absoluta?</p>
+                                <input 
+                                    type="range" 
+                                    min="0" max="100" 
+                                    value={belief} 
+                                    onChange={(e) => setBelief(parseInt(e.target.value))}
+                                />
+                            </div>
+                        )}
+                    </div>
+                    <div className="pt-6">
+                        <Button onClick={() => onNext({ thought, thoughtBelief: belief })} disabled={thought.length < 5}>
+                            Continuar <Icon name="arrow-right" size={18} />
+                        </Button>
+                    </div>
+                </div>
+            );
+        };
+
+        const StepChallenge = ({ data, onNext }) => {
+            const [selectedStrategy, setSelectedStrategy] = useState(null);
+            const [answers, setAnswers] = useState({});
+
+            const handleAnswerChange = (index, value) => setAnswers({ ...answers, [index]: value });
+
+            if (!selectedStrategy) {
+                return (
+                    <div className="slide-up">
+                        <h2 className="text-3xl font-serif font-bold text-stone-800 mb-3">Vamos questionar?</h2>
+                        <p className="text-stone-500 mb-8">Nossos pensamentos nem sempre são fatos. Escolha uma lente para examinar esse pensamento.</p>
+
+                        <div className="space-y-4">
+                            {STRATEGIES.map(st => (
+                                <button
+                                    key={st.id}
+                                    onClick={() => { setSelectedStrategy(st); setAnswers({}); }}
+                                    className="w-full text-left p-6 rounded-2xl bg-white border border-stone-200 hover:border-primary-400 hover:shadow-lg hover:shadow-primary-900/5 transition-all group relative overflow-hidden"
+                                >
+                                    <div className="absolute right-0 top-0 p-6 opacity-5 group-hover:opacity-10 text-primary-900 transition-opacity">
+                                        <Icon name={st.icon} size={64} />
+                                    </div>
+                                    <div className="relative z-10">
+                                        <div className="flex items-center gap-3 mb-2">
+                                            <div className="bg-primary-50 p-2 rounded-lg text-primary-700 group-hover:bg-primary-600 group-hover:text-white transition-colors">
+                                                <Icon name={st.icon} size={20} />
+                                            </div>
+                                            <div>
+                                                <h3 className="font-bold text-stone-800 text-lg group-hover:text-primary-700 transition-colors">{st.title}</h3>
+                                                <p className="text-xs font-bold text-stone-400 uppercase tracking-wide">{st.subtitle}</p>
+                                            </div>
+                                        </div>
+                                        <p className="text-stone-500 text-sm leading-relaxed pl-12">{st.desc}</p>
+                                    </div>
+                                </button>
+                            ))}
+                        </div>
+                    </div>
+                );
+            }
+
+            return (
+                <div className="slide-up flex flex-col h-full">
+                    <button onClick={() => setSelectedStrategy(null)} className="text-xs font-bold text-stone-400 hover:text-primary-600 flex items-center gap-1 mb-4 uppercase tracking-wide transition-colors">
+                        <Icon name="chevron-left" size={14} /> Trocar estratégia
+                    </button>
+
+                    <div className="bg-white rounded-xl p-5 border-l-4 border-primary-500 shadow-sm mb-6">
+                        <p className="text-xs font-bold text-stone-400 uppercase mb-1">Pensamento Alvo</p>
+                        <p className="text-stone-800 font-serif italic text-lg">"{data.thought}"</p>
+                    </div>
+
+                    <h3 className="text-xl font-bold text-stone-800 mb-6 flex items-center gap-2">
+                        <Icon name={selectedStrategy.icon} className="text-primary-600" />
+                        {selectedStrategy.title}
+                    </h3>
+
+                    <div className="flex-1 space-y-8">
+                        {selectedStrategy.questions.map((q, idx) => (
+                            <div key={idx} className="space-y-3">
+                                <label className="block text-sm font-bold text-stone-700 leading-relaxed">{q}</label>
+                                <textarea 
+                                    className="w-full p-4 rounded-lg bg-stone-50 border border-stone-200 focus:border-primary-500 focus:bg-white outline-none text-stone-700 text-sm h-24 transition-all"
+                                    placeholder="Sua resposta..."
+                                    value={answers[idx] || ''}
+                                    onChange={(e) => handleAnswerChange(idx, e.target.value)}
+                                ></textarea>
+                            </div>
+                        ))}
+                    </div>
+
+                    <div className="pt-8">
+                        <Button onClick={() => onNext({ strategy: selectedStrategy, strategyAnswers: answers })}>
+                            Concluir Análise
+                        </Button>
+                    </div>
+                </div>
+            );
+        };
+
+        const StepReframe = ({ data, onFinish }) => {
+            const [balanced, setBalanced] = useState('');
+            const [finalFeeling, setFinalFeeling] = useState(data.emotionIntensity);
+
+            useEffect(() => {
+                const lastAnswerIdx = Object.keys(data.strategyAnswers || {}).length - 1;
+                if (lastAnswerIdx >= 0) setBalanced(data.strategyAnswers[lastAnswerIdx]);
+            }, []);
+
+            return (
+                <div className="slide-up flex flex-col h-full">
+                    <div className="flex-1">
+                        <h2 className="text-3xl font-serif font-bold text-emerald-800 mb-2">Nova Perspectiva</h2>
+                        <p className="text-stone-500 mb-6">Reescreva seu pensamento inicial de forma mais justa e realista.</p>
+
+                        <div className="bg-white rounded-2xl shadow-lg shadow-emerald-900/5 border border-emerald-100 p-6 space-y-6">
+                            <textarea 
+                                className="w-full h-40 p-4 rounded-xl border border-emerald-100 bg-emerald-50/30 focus:border-emerald-500 focus:bg-white focus:ring-4 focus:ring-emerald-500/10 outline-none transition-all text-stone-800 text-lg font-serif resize-none"
+                                value={balanced}
+                                onChange={e => setBalanced(e.target.value)}
+                                placeholder="A verdade é que..."
+                            ></textarea>
+                            
+                            <div className="border-t border-emerald-100 pt-6">
+                                <div className="flex justify-between items-baseline mb-4">
+                                    <span className="text-sm font-bold text-stone-600">Nível da Emoção Agora</span>
+                                    <span className="text-2xl font-serif font-bold text-emerald-700">{finalFeeling}%</span>
+                                </div>
+                                <input 
+                                    type="range" 
+                                    min="0" max="100" 
+                                    value={finalFeeling} 
+                                    onChange={(e) => setFinalFeeling(parseInt(e.target.value))}
+                                    className="accent-emerald-600"
+                                />
+                                <div className="text-center mt-2">
+                                    <span className={`text-xs font-bold px-3 py-1 rounded-full ${finalFeeling < data.emotionIntensity ? 'bg-emerald-100 text-emerald-700' : 'bg-stone-100 text-stone-500'}`}>
+                                        {finalFeeling < data.emotionIntensity ? `Redução de ${data.emotionIntensity - finalFeeling}%` : 'Sem mudança'}
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div className="pt-6">
+                        <Button variant="success" onClick={() => onFinish({ balancedThought: balanced, finalEmotion: finalFeeling })}>
+                            <Icon name="check" /> Finalizar Registro
+                        </Button>
+                    </div>
+                </div>
+            );
+        };
+
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+        root.render(<App />);
+    </script>
+</body>
+</html>
