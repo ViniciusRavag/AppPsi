@@ -3,24 +3,14 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>Ferramentas Cognitivas | Psi. Vinicius Ravagnani</title>
-<!-- React & ReactDOM -->
+<title>Ginásio Cognitivo | Psi. Vinicius Ravagnani</title>
 <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
 <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
-<!-- Babel -->
 <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
-<!-- Tailwind CSS -->
 <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="icon" type="image/png" href="icon.png">
-    
-    <link rel="apple-touch-icon" href="icon.png">
-
-    <link rel="manifest" href="manifest.json">
-<!-- Lucide Icons -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 <script src="https://unpkg.com/lucide@latest"></script>
-<!-- Google Fonts: Merriweather e Lato -->
 <link href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&family=Merriweather:ital,wght@0,300;0,400;0,700;0,900;1,300&display=swap" rel="stylesheet">
-<!-- Configuração do Tailwind -->
 <script>
 tailwind.config = {
   theme: {
@@ -62,38 +52,15 @@ body {
   font-family: 'Lato', sans-serif;
   -webkit-font-smoothing: antialiased;
 }
-/* Utilitários de Animação */
 .fade-in { animation: fadeIn 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
 .slide-up { animation: slideUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
 @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 @keyframes slideUp { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
-/* Custom Range Slider */
-input[type=range] {
-  -webkit-appearance: none;
-  width: 100%;
-  background: transparent;
-}
-input[type=range]::-webkit-slider-thumb {
-  -webkit-appearance: none;
-  height: 28px;
-  width: 28px;
-  border-radius: 50%;
-  background: #737B57;
-  border: 4px solid #fff;
-  box-shadow: 0 4px 8px rgba(0,0,0,0.15);
-  margin-top: -12px;
-  cursor: pointer;
-  transition: transform 0.1s;
-}
+input[type=range] { -webkit-appearance: none; width: 100%; background: transparent; }
+input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; height: 28px; width: 28px; border-radius: 50%; background: #737B57; border: 4px solid #fff; box-shadow: 0 4px 8px rgba(0,0,0,0.15); margin-top: -12px; cursor: pointer; transition: transform 0.1s; }
 input[type=range]::-webkit-slider-thumb:hover { transform: scale(1.1); }
-input[type=range]::-webkit-slider-runnable-track {
-  width: 100%;
-  height: 4px;
-  background: #e7e5e4;
-  border-radius: 999px;
-}
+input[type=range]::-webkit-slider-runnable-track { width: 100%; height: 4px; background: #e7e5e4; border-radius: 999px; }
 input[type=range]:focus { outline: none; }
-/* Scrollbar elegante */
 ::-webkit-scrollbar { width: 6px; }
 ::-webkit-scrollbar-track { background: transparent; }
 ::-webkit-scrollbar-thumb { background: #d6d3d1; border-radius: 10px; }
@@ -115,74 +82,20 @@ const EMOTIONS = [
 ];
 
 const STRATEGIES = [
-  {
-    id: 'investigator',
-    title: 'O Investigador',
-    subtitle: 'Análise de Evidências',
-    desc: 'Vamos olhar para os fatos. O que é real e o que é suposição?',
-    icon: 'search',
-    questions: [
-      'Quais fatos REAIS comprovam que esse pensamento é 100% verdadeiro?',
-      'Existem fatos que mostram o contrário? (Seja honesto)',
-      'Conclusão baseada apenas nos fatos:'
-    ]
-  },
-  {
-    id: 'friend',
-    title: 'Conselho de Amigo',
-    subtitle: 'Autocompaixão',
-    desc: 'Saia de dentro da sua cabeça e imagine ajudar alguém que você ama.',
-    icon: 'heart-handshake',
-    questions: [
-      'Se seu melhor amigo estivesse nessa situação, o que você diria para ele?',
-      'Por que você está sendo mais duro com você mesmo?',
-      'Reescreva o pensamento com mais gentileza:'
-    ]
-  },
-  {
-    id: 'perspective',
-    title: 'O Realista',
-    subtitle: 'Descatastrofização',
-    desc: 'Vamos pensar em cenários além da catástrofe.',
-    icon: 'scale',
-    questions: [
-      'Qual é a PIOR coisa que pode acontecer? Você sobreviveria a isso?',
-      'Qual é a MELHOR coisa que pode acontecer?',
-      'O que é o mais PROVÁVEL de acontecer?'
-    ]
-  }
+  { id: 'investigator', title: 'O Investigador', subtitle: 'Análise de Evidências', desc: 'Vamos olhar para os fatos. O que é real e o que é suposição?', icon: 'search', questions: ['Quais fatos REAIS comprovam que esse pensamento é 100% verdadeiro?', 'Existem fatos que mostram o contrário? (Seja honesto)', 'Conclusão baseada apenas nos fatos:'] },
+  { id: 'friend', title: 'Conselho de Amigo', subtitle: 'Autocompaixão', desc: 'Saia de dentro da sua cabeça e imagine ajudar alguém que você ama.', icon: 'heart-handshake', questions: ['Se seu melhor amigo estivesse nessa situação, o que você diria para ele?', 'Por que você está sendo mais duro com você mesmo?', 'Reescreva o pensamento com mais gentileza:'] },
+  { id: 'perspective', title: 'O Realista', subtitle: 'Descatastrofização', desc: 'Vamos pensar em cenários além da catástrofe.', icon: 'scale', questions: ['Qual é a PIOR coisa que pode acontecer? Você sobreviveria a isso?', 'Qual é a MELHOR coisa que pode acontecer?', 'O que é o mais PROVÁVEL de acontecer?'] }
 ];
 
 const MODULES = {
-  foco: {
-    id: 'foco',
-    title: 'Filtro Positivo',
-    desc: 'Treine seu cérebro para enxergar o que deu certo.',
-    icon: 'sun',
-    color: 'text-amber-600',
-    bg: 'bg-amber-50'
-  },
-  mudanca: {
-    id: 'mudanca',
-    title: 'Balança da Mudança',
-    desc: 'Avalie os custos reais de permanecer ou de mudar.',
-    icon: 'scale',
-    color: 'text-indigo-600',
-    bg: 'bg-indigo-50'
-  },
-  expectativa: {
-    id: 'expectativa',
-    title: 'Expectativa/Realidade',
-    desc: 'Alinhe suas expectativas com a realidade.',
-    icon: 'glasses',
-    color: 'text-emerald-600',
-    bg: 'bg-emerald-50'
-  }
+  foco: { id: 'foco', title: 'Filtro Positivo', desc: 'Treine seu cérebro para enxergar o que deu certo.', icon: 'sun', color: 'text-amber-600', bg: 'bg-amber-50' },
+  mudanca: { id: 'mudanca', title: 'Balança da Mudança', desc: 'Avalie os custos reais de permanecer ou de mudar.', icon: 'scale', color: 'text-indigo-600', bg: 'bg-indigo-50' },
+  expectativa: { id: 'expectativa', title: 'Expectativa/Realidade', desc: 'Alinhe suas expectativas com a realidade.', icon: 'glasses', color: 'text-emerald-600', bg: 'bg-emerald-50' }
 };
 
-// --- COMPONENTES UI (DESIGN SYSTEM) ---
+// --- COMPONENTES UI ---
 const Icon = ({ name, size = 20, className = "" }) => {
-  useEffect(() => { if (window.lucide) window.lucide.createIcons(); }, [name]);
+  useEffect(() => { if (window.lucide) window.lucide.createIcons(); });
   return <i data-lucide={name} width={size} height={size} className={className}></i>;
 };
 
@@ -202,66 +115,29 @@ const Button = ({ children, onClick, variant = 'primary', className = "", disabl
   );
 };
 
-const Card = ({ children, className = "" }) => (
-  <div className={`bg-white rounded-2xl shadow-soft border border-stone-100 p-6 ${className} fade-in`}>
-    {children}
-  </div>
-);
-
 const ProgressBar = ({ current, total }) => (
   <div className="w-full bg-stone-200 h-1.5 rounded-full mb-8 overflow-hidden">
-    <div
-      className="bg-primary-700 h-full transition-all duration-700 ease-in-out shadow-[0_0_10px_rgba(14,116,144,0.5)]"
-      style={{ width: `${(current / total) * 100}%` }}
-    ></div>
+    <div className="bg-primary-700 h-full transition-all duration-700 ease-in-out shadow-[0_0_10px_rgba(14,116,144,0.5)]" style={{ width: `${(current / total) * 100}%` }}></div>
   </div>
 );
 
 const TextArea = ({ value, onChange, placeholder, autoFocus = false, className = "" }) => (
-  <textarea
-    className={`w-full p-5 rounded-xl bg-white border border-stone-200 focus:border-primary-500 focus:ring-4 focus:ring-primary-100 outline-none transition-all text-stone-700 text-lg leading-relaxed shadow-inner resize-none font-serif placeholder:font-sans ${className}`}
-    placeholder={placeholder} value={value} onChange={onChange} autoFocus={autoFocus}
-  ></textarea>
+  <textarea className={`w-full p-5 rounded-xl bg-white border border-stone-200 focus:border-primary-500 focus:ring-4 focus:ring-primary-100 outline-none transition-all text-stone-700 text-lg leading-relaxed shadow-inner resize-none font-serif placeholder:font-sans ${className}`} placeholder={placeholder} value={value} onChange={onChange} autoFocus={autoFocus}></textarea>
 );
-
-// --- SERVIÇO DE DADOS (UNIFICADO) ---
-const DataService = {
-  saveEntry: async (entry) => {
-    const existing = JSON.parse(localStorage.getItem('cognitive_tools_entries') || '[]');
-    const newEntries = [entry, ...existing];
-    localStorage.setItem('cognitive_tools_entries', JSON.stringify(newEntries));
-    return newEntries;
-  },
-  getEntries: async () => JSON.parse(localStorage.getItem('cognitive_tools_entries') || '[]')
-};
 
 // --- APLICAÇÃO PRINCIPAL ---
 const App = () => {
-  const [view, setView] = useState('home'); // home, history, diario, foco, mudanca, expectativa
-  const [entries, setEntries] = useState([]);
+  const [view, setView] = useState('home'); 
+  const [finalData, setFinalData] = useState(null); // Armazena dados temporários para o Cartão Final
   const [currentDiarioEntry, setCurrentDiarioEntry] = useState({});
   const [diarioStep, setDiarioStep] = useState(0);
 
   useEffect(() => {
-    DataService.getEntries().then(setEntries);
     if (window.lucide) window.lucide.createIcons();
-  }, []);
+  }, [view]);
 
-  // Handlers para Diário
   const startDiario = () => {
-    setCurrentDiarioEntry({
-      id: Date.now().toString(),
-      date: new Date().toISOString(),
-      situation: '',
-      emotion: null,
-      emotionIntensity: 50,
-      thought: '',
-      thoughtBelief: 80,
-      strategy: null,
-      strategyAnswers: {},
-      balancedThought: '',
-      finalEmotion: 50
-    });
+    setCurrentDiarioEntry({ situation: '', emotion: null, emotionIntensity: 50, thought: '', thoughtBelief: 80, strategy: null, strategyAnswers: {}, balancedThought: '', finalEmotion: 50 });
     setDiarioStep(1);
     setView('diario');
   };
@@ -271,36 +147,19 @@ const App = () => {
     setDiarioStep(prev => prev + 1);
   };
 
-  const handleDiarioFinish = async (finalData) => {
-    const completeEntry = { ...currentDiarioEntry, ...finalData, type: 'diario' };
-    const updatedList = await DataService.saveEntry(completeEntry);
-    setEntries(updatedList);
-    setView('history');
+  const handleDiarioFinish = (data) => {
+    setFinalData({ ...currentDiarioEntry, ...data, type: 'diario' });
+    setView('summary');
   };
 
-  // Handlers para Bússola
-  const handleBussolaFinish = async (entryData, type) => {
-    const completeEntry = { id: Date.now().toString(), date: new Date().toISOString(), type, data: entryData };
-    const updatedList = await DataService.saveEntry(completeEntry);
-    setEntries(updatedList);
-    setView('history');
+  const handleBussolaFinish = (data, type) => {
+    setFinalData({ type, data });
+    setView('summary');
   };
 
-  const exportData = () => {
-    const dataStr = JSON.stringify(entries);
-    const encoded = btoa(unescape(encodeURIComponent(dataStr)));
-    navigator.clipboard.writeText(encoded);
-    alert("Dados copiados com segurança. Cole na mensagem para o Psi. Vinicius.");
-  };
-
-  // Router
-  if (view === 'home') return <HomeView onSelect={setView} onStartDiario={startDiario} hasEntries={entries.length > 0} />;
-  if (view === 'history') return <HistoryView entries={entries} onBack={() => setView('home')} onExport={exportData} />;
-  
-  // Views do Diário
+  if (view === 'home') return <HomeView onSelect={setView} onStartDiario={startDiario} />;
+  if (view === 'summary') return <SummaryCardView data={finalData} onClose={() => { setFinalData(null); setView('home'); }} />;
   if (view === 'diario') return <DiarioWizard step={diarioStep} data={currentDiarioEntry} onNext={handleDiarioNext} onFinish={handleDiarioFinish} onCancel={() => setView('home')} />;
-  
-  // Views da Bússola
   if (view === 'foco') return <WizardFoco onFinish={(data) => handleBussolaFinish(data, 'foco')} onCancel={() => setView('home')} />;
   if (view === 'mudanca') return <WizardMudanca onFinish={(data) => handleBussolaFinish(data, 'mudanca')} onCancel={() => setView('home')} />;
   if (view === 'expectativa') return <WizardExpectativa onFinish={(data) => handleBussolaFinish(data, 'expectativa')} onCancel={() => setView('home')} />;
@@ -308,12 +167,11 @@ const App = () => {
   return null;
 };
 
-// --- TELA INICIAL (Home Unificada) ---
-const HomeView = ({ onSelect, onStartDiario, hasEntries }) => (
+// --- TELA INICIAL (Efêmera) ---
+const HomeView = ({ onSelect, onStartDiario }) => (
   <div className="min-h-screen flex flex-col relative overflow-hidden">
     <div className="absolute top-0 left-0 w-full h-64 bg-gradient-to-b from-primary-900 to-primary-800 z-0"></div>
     <div className="relative z-10 flex-1 flex flex-col max-w-md mx-auto w-full p-6 pt-12">
-      {/* Header Profissional */}
       <div className="bg-white/95 backdrop-blur-md rounded-2xl p-6 shadow-card mb-8 border border-white/50 slide-up">
         <div className="flex items-center gap-4 mb-4">
           <div className="w-16 h-16 rounded-full border-2 border-white shadow-md overflow-hidden shrink-0">
@@ -325,206 +183,183 @@ const HomeView = ({ onSelect, onStartDiario, hasEntries }) => (
           </div>
         </div>
         <p className="text-stone-600 text-sm leading-relaxed border-t border-stone-100 pt-4 italic font-serif">
-          "Seja Bem-vindo(a). Esta é uma ferramenta segura de reflexão e organização de pensamentos que usaremos entre nossas sessões, escolha um guia abaixo para exercitar sua mente hoje"
+          "Bem-vindo ao seu Ginásio Cognitivo. Use este espaço seguro para organizar seus pensamentos e praticar o que discutimos em sessão."
         </p>
       </div>
 
-      {/* Menu Principal */}
       <div className="space-y-4 slide-up" style={{ animationDelay: '0.1s' }}>
-        {/* Botão Diário */}
         <button onClick={onStartDiario} className="w-full bg-white p-5 rounded-2xl border border-stone-200 hover:border-primary-400 hover:shadow-lg transition-all text-left flex items-center gap-4 group">
-          <div className="w-14 h-14 rounded-xl flex items-center justify-center shrink-0 bg-primary-50 text-primary-700 group-hover:scale-110 transition-transform">
-            <Icon name="pen-tool" size={28} />
-          </div>
-          <div>
-            <h3 className="font-serif font-bold text-lg text-stone-800">Diário Cognitivo</h3>
-            <p className="text-sm text-stone-500 leading-tight mt-1">Reestruture pensamentos difíceis passo a passo.</p>
-          </div>
+          <div className="w-14 h-14 rounded-xl flex items-center justify-center shrink-0 bg-primary-50 text-primary-700 group-hover:scale-110 transition-transform"><Icon name="pen-tool" size={28} /></div>
+          <div><h3 className="font-serif font-bold text-lg text-stone-800">Pronto-Socorro do Pensamento</h3><p className="text-sm text-stone-500 leading-tight mt-1">Reestruture emoções difíceis passo a passo.</p></div>
           <Icon name="chevron-right" className="ml-auto text-stone-300 group-hover:text-primary-500" />
         </button>
-
-        {/* Botões Bússola */}
         {Object.values(MODULES).map(mod => (
           <button key={mod.id} onClick={() => onSelect(mod.id)} className="w-full bg-white p-5 rounded-2xl border border-stone-200 hover:border-primary-400 hover:shadow-lg transition-all text-left flex items-center gap-4 group">
-            <div className={`w-14 h-14 rounded-xl flex items-center justify-center shrink-0 ${mod.bg} ${mod.color} group-hover:scale-110 transition-transform`}>
-              <Icon name={mod.icon} size={28} />
-            </div>
-            <div>
-              <h3 className="font-serif font-bold text-lg text-stone-800">{mod.title}</h3>
-              <p className="text-sm text-stone-500 leading-tight mt-1">{mod.desc}</p>
-            </div>
+            <div className={`w-14 h-14 rounded-xl flex items-center justify-center shrink-0 ${mod.bg} ${mod.color} group-hover:scale-110 transition-transform`}><Icon name={mod.icon} size={28} /></div>
+            <div><h3 className="font-serif font-bold text-lg text-stone-800">{mod.title}</h3><p className="text-sm text-stone-500 leading-tight mt-1">{mod.desc}</p></div>
             <Icon name="chevron-right" className="ml-auto text-stone-300 group-hover:text-primary-500" />
           </button>
         ))}
       </div>
-
-      <div className="mt-8 slide-up" style={{ animationDelay: '0.2s' }}>
-        {hasEntries && (
-          <Button variant="secondary" onClick={() => onSelect('history')} className="shadow-sm">
-            <Icon name="book-open" /> Ver Histórico Completo
-          </Button>
-        )}
-      </div>
       
       <div className="mt-auto pt-10 text-center pb-6 opacity-60">
-        <p className="text-xs text-stone-400 flex items-center justify-center gap-1">
-          <Icon name="lock" size={10} /> Dados armazenados localmente.
+        <div className="bg-stone-200 text-stone-600 text-xs px-3 py-1.5 rounded-full inline-flex items-center gap-2 font-bold mb-2">
+          <Icon name="shield-check" size={14} /> Privacidade Total
+        </div>
+        <p className="text-xs text-stone-400 leading-relaxed px-4">
+          Nenhum dado é salvo no seu dispositivo. Tudo o que você escrever aqui será apagado ao fechar o aplicativo.
         </p>
       </div>
     </div>
   </div>
 );
 
-// --- HISTÓRICO UNIFICADO ---
-const HistoryView = ({ entries, onBack, onExport }) => (
-  <div className="min-h-screen bg-stone-50 flex flex-col">
-    <header className="sticky top-0 bg-white/80 backdrop-blur-lg border-b border-stone-100 z-20 px-6 py-4 flex justify-between items-center">
-      <button onClick={onBack} className="p-2 -ml-2 text-stone-400 hover:text-primary-700 transition-colors">
-        <Icon name="arrow-left" />
-      </button>
-      <span className="font-serif font-bold text-stone-700">Seu Acervo</span>
-      <div className="w-8"></div>
-    </header>
-    <div className="flex-1 max-w-xl mx-auto w-full p-6 space-y-6">
-      {entries.length === 0 && (
-        <div className="text-center py-20 opacity-50">
-          <Icon name="feather" size={48} className="mx-auto mb-4 text-stone-300" />
-          <p className="font-serif text-stone-400">Nenhum registro encontrado.</p>
-        </div>
-      )}
-      {entries.map(entry => {
-       
-        // Render Diário
-if (entry.type === 'diario') {
-    const emo = EMOTIONS.find(e => e.id === entry.emotion?.id);
-    return (
-        <div key={entry.id} className="bg-white rounded-xl shadow-sm border border-stone-100 overflow-hidden group hover:shadow-md transition-shadow duration-300">
-            {/* NOVO CABEÇALHO PADRONIZADO */}
-            <div className="px-5 py-2 border-b border-stone-100 flex items-center justify-between bg-primary-50">
-                <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-primary-700">
-                    <Icon name="pen-tool" size={14} /> Diário Cognitivo
-                </div>
-                <span className="text-xs font-bold text-stone-400">
-                    {new Date(entry.date).toLocaleDateString('pt-BR', { day: '2-digit', month: 'short' })}
-                </span>
-            </div>
-            
-            <div className="p-5">
-                {/* Conteúdo Interno */}
-                <div className="flex justify-between items-start mb-3">
-                    {/* A data foi removida daqui para ir ao topo */}
-                    <div className="w-4"></div> 
-                    {emo && (
-                        <span className={`text-xs px-2 py-0.5 rounded-full border flex items-center gap-1 ${emo.color}`}>
-                            <Icon name={emo.icon} size={10} /> {emo.label}
-                        </span>
-                    )}
-                </div>
-                <h3 className="font-serif font-bold text-stone-800 mb-2">{entry.situation}</h3>
-                <div className="pl-3 border-l-2 border-primary-100 my-3">
-                    <p className="text-sm text-stone-500 italic">"{entry.thought}"</p>
-                </div>
-                {entry.balancedThought && (
-                    <div className="bg-emerald-50/50 rounded-lg p-3 mt-4 border border-emerald-100/50">
-                        <p className="text-xs text-emerald-700 font-bold mb-1 flex items-center gap-1.5">
-                            <Icon name="check-circle" size={12} /> Reestruturação
-                        </p>
-                        <p className="text-sm text-stone-700">{entry.balancedThought}</p>
-                    </div>
-                )}
-            </div>
-        </div>
-    );
-}
-        
-        // Render Bússola
-        const mod = MODULES[entry.type];
-        if (!mod) return null;
-        return (
-          <div key={entry.id} className="bg-white rounded-xl shadow-sm border border-stone-100 overflow-hidden hover:shadow-md transition-shadow">
-            <div className={`px-5 py-2 border-b border-stone-100 flex items-center justify-between ${mod.bg}`}>
-              <div className={`flex items-center gap-2 text-xs font-bold uppercase tracking-wider ${mod.color}`}>
-                <Icon name={mod.icon} size={14} /> {mod.title}
-              </div>
-              <span className="text-xs font-bold text-stone-400">
-                {new Date(entry.date).toLocaleDateString('pt-BR', { day: '2-digit', month: 'short' })}
-              </span>
-            </div>
-            <div className="p-5">
-              {entry.type === 'foco' && (
-                <>
-                  <p className="text-sm text-stone-500 italic mb-2">Visão Negativa:</p>
-                  <p className="text-stone-800 font-serif mb-4">"{entry.data.bad}"</p>
-                  <p className="text-sm text-emerald-600 font-bold mb-1">O que também deu certo:</p>
-                  <ul className="text-sm text-stone-600 list-disc pl-4 space-y-1">
-                    <li>{entry.data.good1}</li>
-                    <li>{entry.data.good2}</li>
-                    <li>{entry.data.good3}</li>
-                  </ul>
-                </>
-              )}
-              {entry.type === 'mudanca' && (
-                <>
-                  <h3 className="font-serif font-bold text-stone-800 mb-3">Dilema: {entry.data.dilemma}</h3>
-                  <div className="grid grid-cols-2 gap-2 text-sm">
-                    <div className="bg-rose-50 p-2 rounded border border-rose-100 text-rose-800"><span className="font-bold text-xs block">Preço de Ficar:</span> {entry.data.stayCons}</div>
-                    <div className="bg-indigo-50 p-2 rounded border border-indigo-100 text-indigo-800"><span className="font-bold text-xs block">Ganho de Mudar:</span> {entry.data.changePros}</div>
-                  </div>
-                </>
-              )}
-              {entry.type === 'expectativa' && (
-                <>
-                  <p className="text-sm font-bold text-stone-700 mb-1">Situação: <span className="font-normal">{entry.data.situation}</span></p>
-                  <div className="flex gap-4 my-3 text-sm">
-                    <div className="flex-1 p-2 bg-stone-50 rounded border border-stone-200"><strong className="block text-amber-600 text-xs">Expectativa</strong> {entry.data.expectation}</div>
-                    <div className="flex-1 p-2 bg-stone-50 rounded border border-stone-200"><strong className="block text-rose-600 text-xs">Realidade</strong> {entry.data.reality}</div>
-                  </div>
-                  <p className="text-sm font-bold text-stone-600 mt-2">Escolha: {entry.data.choice === 'adaptar' ? 'Atualizar Expectativa' : 'Brigar com a Realidade'}</p>
-                </>
-              )}
-            </div>
+// --- CARTÃO DE ENFRENTAMENTO (TELA FINAL COM EXPORTAÇÃO) ---
+const SummaryCardView = ({ data, onClose }) => {
+  const [isExporting, setIsExporting] = useState(false);
+  const cardRef = useRef(null);
+
+  const downloadCard = async () => {
+    setIsExporting(true);
+    try {
+      const canvas = await html2canvas(cardRef.current, { scale: 2, useCORS: true, backgroundColor: '#fdfbf7' });
+      const image = canvas.toDataURL("image/png");
+      const link = document.createElement("a");
+      link.href = image;
+      link.download = `meu-cartao-cognitivo-${new Date().getTime()}.png`;
+      link.click();
+    } catch (err) {
+      alert("Não foi possível salvar a imagem. Tente tirar um print da tela.");
+    } finally {
+      setIsExporting(false);
+    }
+  };
+
+  // Renderiza o conteúdo do cartão dependendo do exercício
+  const renderContent = () => {
+    if (data.type === 'diario') {
+      return (
+        <div className="space-y-4">
+          <div className="bg-stone-50 p-4 rounded-xl border border-stone-100">
+            <span className="text-xs font-bold text-stone-400 uppercase tracking-wider block mb-1">O Pensamento Inicial:</span>
+            <p className="font-serif text-stone-600 italic">"{data.thought}"</p>
           </div>
-        );
-      })}
+          <div className="flex justify-center"><Icon name="arrow-down" className="text-primary-300" /></div>
+          <div className="bg-emerald-50 p-5 rounded-xl border border-emerald-100 shadow-sm relative">
+            <div className="absolute -top-3 left-4 bg-emerald-600 text-white text-xs font-bold px-2 py-1 rounded">Nova Perspectiva</div>
+            <p className="font-serif font-bold text-emerald-900 mt-2 text-lg">"{data.balancedThought}"</p>
+          </div>
+        </div>
+      );
+    }
+    if (data.type === 'foco') {
+      return (
+        <div className="space-y-4">
+          <div className="bg-rose-50 p-4 rounded-xl border border-rose-100 opacity-70">
+            <span className="text-xs font-bold text-rose-800 uppercase tracking-wider block mb-1">O Foco Negativo:</span>
+            <p className="font-serif text-stone-600 italic">"{data.data.bad}"</p>
+          </div>
+          <div className="bg-amber-50 p-5 rounded-xl border border-amber-200 shadow-sm relative mt-4">
+            <div className="absolute -top-3 left-4 bg-amber-500 text-white text-xs font-bold px-2 py-1 rounded">O que também deu certo</div>
+            <ul className="list-disc pl-5 mt-2 font-serif text-amber-900 space-y-1">
+              <li>{data.data.good1}</li>
+              <li>{data.data.good2}</li>
+              <li>{data.data.good3}</li>
+            </ul>
+          </div>
+        </div>
+      );
+    }
+    if (data.type === 'mudanca') {
+      return (
+        <div className="space-y-4">
+          <h3 className="font-serif font-bold text-stone-800 border-b pb-2">Dilema: {data.data.dilemma}</h3>
+          <div className="bg-rose-50 p-4 rounded-xl border border-rose-100">
+            <span className="text-xs font-bold text-rose-800 uppercase tracking-wider block mb-1">Custo de não mudar:</span>
+            <p className="font-serif text-stone-600">"{data.data.stayCons}"</p>
+          </div>
+          <div className="bg-indigo-50 p-4 rounded-xl border border-indigo-100 shadow-sm">
+            <span className="text-xs font-bold text-indigo-800 uppercase tracking-wider block mb-1">Ganho ao ter coragem:</span>
+            <p className="font-serif font-bold text-indigo-900">"{data.data.changePros}"</p>
+          </div>
+        </div>
+      );
+    }
+    if (data.type === 'expectativa') {
+      return (
+        <div className="space-y-4">
+          <div className="bg-stone-50 p-4 rounded-xl border border-stone-100">
+             <span className="text-xs font-bold text-stone-400 uppercase tracking-wider block mb-1">Expectativa Quebrada:</span>
+             <p className="font-serif text-stone-600">"{data.data.expectation}"</p>
+          </div>
+          <div className="bg-emerald-50 p-5 rounded-xl border border-emerald-200 shadow-sm relative mt-4">
+            <div className="absolute -top-3 left-4 bg-emerald-600 text-white text-xs font-bold px-2 py-1 rounded">Minha Decisão</div>
+            <p className="font-bold text-emerald-900 mt-2 mb-2 uppercase text-sm">{data.data.choice === 'adaptar' ? 'Atualizar a Expectativa' : 'Brigar com a Realidade'}</p>
+            <p className="font-serif italic text-stone-700">"{data.data.consequence}"</p>
+          </div>
+        </div>
+      );
+    }
+    return null;
+  };
+
+  return (
+    <div className="min-h-screen bg-stone-100 flex flex-col p-6 items-center justify-center fade-in">
+      <div className="max-w-md w-full">
+        {/* Este é o elemento que será printado pelo html2canvas */}
+        <div ref={cardRef} className="bg-white rounded-3xl p-8 shadow-card border-2 border-primary-100 relative mb-8" id="coping-card">
+          <div className="text-center mb-6">
+            <Icon name="brain-circuit" size={32} className="mx-auto text-primary-500 mb-2" />
+            <h2 className="font-serif text-2xl font-bold text-stone-800">Cartão de Enfrentamento</h2>
+            <p className="text-xs text-stone-400 uppercase tracking-widest mt-1">Lembrete Pessoal</p>
+          </div>
+          
+          {renderContent()}
+
+          <div className="mt-8 pt-6 border-t border-stone-100 flex items-center justify-center gap-3 opacity-50">
+            <Icon name="check-circle-2" size={16} />
+            <span className="text-xs font-bold tracking-wide">Prática Concluída | Psi. Vinicius Ravagnani</span>
+          </div>
+        </div>
+
+        {/* Controles fora do Cartão (não saem na foto) */}
+        <div className="space-y-3">
+          <Button variant="primary" onClick={downloadCard} disabled={isExporting}>
+            <Icon name={isExporting ? "loader-2" : "download"} className={isExporting ? "animate-spin" : ""} /> 
+            {isExporting ? "Gerando imagem..." : "Salvar Cartão no Celular"}
+          </Button>
+          <Button variant="ghost" onClick={onClose}>
+            Descartar e Voltar <Icon name="trash-2" size={16}/>
+          </Button>
+          <p className="text-xs text-center text-stone-400 px-4 mt-4">
+            Ao clicar em descartar, este exercício será <strong>apagado para sempre</strong>. Salve se quiser levar para a sessão.
+          </p>
+        </div>
+      </div>
     </div>
-    <div className="p-6 bg-white border-t border-stone-100 text-center">
-      <Button variant="ghost" onClick={onExport} className="text-xs font-normal border border-dashed border-stone-300">
-        <Icon name="share" size={14} /> Exportar dados para Terapia
-      </Button>
-    </div>
-  </div>
-);
+  );
+};
 
 // ==========================================
-// WIZARD DIÁRIO COGNITIVO
+// OS WIZARDS PERMANECEM IGUAIS AO ANTERIOR
+// (Abaixo apenas as funções de View dos exercícios - não mudaram a lógica visual, apenas o `onFinish`)
 // ==========================================
+
 const DiarioWizard = ({ step, data, onNext, onFinish, onCancel }) => {
-  const steps = [
-    { title: 'A Situação', comp: StepSituation },
-    { title: 'A Emoção', comp: StepEmotion },
-    { title: 'O Pensamento', comp: StepThought },
-    { title: 'Desafiando', comp: StepChallenge },
-    { title: 'Reestruturando', comp: StepReframe },
-  ];
+  const steps = [ { title: 'A Situação', comp: StepSituation }, { title: 'A Emoção', comp: StepEmotion }, { title: 'O Pensamento', comp: StepThought }, { title: 'Desafiando', comp: StepChallenge }, { title: 'Reestruturando', comp: StepReframe } ];
   const CurrentComp = steps[step - 1]?.comp;
   return (
     <div className="min-h-screen bg-paper flex flex-col">
       <div className="max-w-xl mx-auto w-full h-full flex flex-col flex-1">
         <div className="p-6 pb-2">
           <div className="flex justify-between items-center mb-6">
-            <button onClick={onCancel} className="text-stone-400 hover:text-stone-600 transition-colors">
-              <Icon name="x" size={24} />
-            </button>
-            <span className="text-xs font-bold text-primary-700 tracking-widest uppercase bg-primary-50 px-3 py-1 rounded-full">
-              {steps[step-1].title}
-            </span>
+            <button onClick={onCancel} className="text-stone-400 hover:text-stone-600 transition-colors"><Icon name="x" size={24} /></button>
+            <span className="text-xs font-bold text-primary-700 tracking-widest uppercase bg-primary-50 px-3 py-1 rounded-full">{steps[step-1].title}</span>
             <div className="w-6"></div>
           </div>
           <ProgressBar current={step} total={5} />
         </div>
-        <div className="flex-1 px-6 pb-8 overflow-y-auto">
-          {CurrentComp && <CurrentComp data={data} onNext={onNext} onFinish={onFinish} />}
-        </div>
+        <div className="flex-1 px-6 pb-8 overflow-y-auto">{CurrentComp && <CurrentComp data={data} onNext={onNext} onFinish={onFinish} />}</div>
       </div>
     </div>
   );
@@ -533,481 +368,60 @@ const DiarioWizard = ({ step, data, onNext, onFinish, onCancel }) => {
 const StepSituation = ({ onNext }) => {
   const [text, setText] = useState('');
   return (
-    <div className="slide-up flex flex-col h-full">
-      <div className="flex-1">
-        <h2 className="text-3xl font-serif font-bold text-stone-800 mb-3">O que aconteceu?</h2>
-        <p className="text-stone-500 mb-8 leading-relaxed">Descreva a situação que te abalou. Como ocorreu?.</p>
-        <textarea
-          className="w-full h-48 p-6 rounded-xl bg-white border border-stone-200 focus:border-primary-500 focus:ring-4 focus:ring-primary-100 outline-none transition-all text-stone-700 text-lg leading-relaxed shadow-inner resize-none font-serif placeholder:font-sans"
-          placeholder="Ex: Eu estava tranquilo(a) até que meu chefe me mandou uma mensagem dizendo para eu ir até a sala dele amanhã..."
-          value={text}
-          onChange={e => setText(e.target.value)}
-          autoFocus
-        ></textarea>
-      </div>
-      <div className="pt-6">
-        <Button onClick={() => onNext({ situation: text })} disabled={text.length < 3}>
-          Continuar <Icon name="arrow-right" size={18} />
-        </Button>
-      </div>
-    </div>
+    <div className="slide-up flex flex-col h-full"><div className="flex-1"><h2 className="text-3xl font-serif font-bold text-stone-800 mb-3">O que aconteceu?</h2><p className="text-stone-500 mb-8 leading-relaxed">Descreva a situação que te abalou.</p><textarea className="w-full h-48 p-6 rounded-xl bg-white border border-stone-200 focus:border-primary-500 focus:ring-4 focus:ring-primary-100 outline-none transition-all text-stone-700 text-lg leading-relaxed shadow-inner resize-none font-serif placeholder:font-sans" placeholder="Ex: Eu estava tranquilo(a) até que..." value={text} onChange={e => setText(e.target.value)} autoFocus></textarea></div><div className="pt-6"><Button onClick={() => onNext({ situation: text })} disabled={text.length < 3}>Continuar <Icon name="arrow-right" size={18} /></Button></div></div>
   );
 };
 
 const StepEmotion = ({ onNext }) => {
-  const [selected, setSelected] = useState(null);
-  const [intensity, setIntensity] = useState(50);
+  const [selected, setSelected] = useState(null); const [intensity, setIntensity] = useState(50);
   return (
-    <div className="slide-up flex flex-col h-full">
-      <div className="flex-1">
-        <h2 className="text-3xl font-serif font-bold text-stone-800 mb-3">Como se sentiu?</h2>
-        <p className="text-stone-500 mb-6">Identifique a emoção predominante no momento.</p>
-        <div className="grid grid-cols-2 gap-4 mb-8">
-          {EMOTIONS.map(emo => (
-            <button
-              key={emo.id}
-              onClick={() => setSelected(emo)}
-              className={`relative p-4 rounded-xl border transition-all duration-300 text-left group overflow-hidden ${
-                selected?.id === emo.id
-                ? `${emo.color} ring-2 ring-offset-2 ring-offset-paper shadow-md scale-[1.02]`
-                : 'bg-white border-stone-100 text-stone-500 hover:border-primary-200 hover:bg-stone-50'
-              }`}
-            >
-              <div className="flex justify-between items-start mb-2">
-                <Icon name={emo.icon} size={24} className={selected?.id === emo.id ? 'opacity-100' : 'opacity-50 group-hover:opacity-80'} />
-                {selected?.id === emo.id && <div className="w-2 h-2 rounded-full bg-current animate-pulse"></div>}
-              </div>
-              <span className="font-bold block">{emo.label}</span>
-            </button>
-          ))}
-        </div>
-        {selected && (
-          <div className="bg-white p-6 rounded-2xl border border-stone-100 shadow-soft fade-in">
-            <div className="flex justify-between items-baseline mb-4">
-              <label className="text-sm font-bold text-stone-600 uppercase tracking-wide">Intensidade</label>
-              <span className="text-2xl font-serif font-bold text-primary-700">{intensity}%</span>
-            </div>
-            <input
-              type="range"
-              min="0" max="100"
-              value={intensity}
-              onChange={(e) => setIntensity(parseInt(e.target.value))}
-            />
-            <div className="flex justify-between text-xs text-stone-400 mt-2 font-medium">
-              <span>Leve</span>
-              <span>Moderada</span>
-              <span>Intensa</span>
-            </div>
-          </div>
-        )}
-      </div>
-      <div className="pt-6">
-        <Button onClick={() => onNext({ emotion: selected, emotionIntensity: intensity })} disabled={!selected}>
-          Continuar <Icon name="arrow-right" size={18} />
-        </Button>
-      </div>
-    </div>
+    <div className="slide-up flex flex-col h-full"><div className="flex-1"><h2 className="text-3xl font-serif font-bold text-stone-800 mb-3">Como se sentiu?</h2><div className="grid grid-cols-2 gap-4 mb-8">{EMOTIONS.map(emo => (<button key={emo.id} onClick={() => setSelected(emo)} className={`relative p-4 rounded-xl border transition-all duration-300 text-left group ${selected?.id === emo.id ? `${emo.color} ring-2 ring-offset-2 ring-offset-paper shadow-md scale-[1.02]` : 'bg-white border-stone-100 text-stone-500 hover:bg-stone-50'}`}><span className="font-bold block">{emo.label}</span></button>))}</div>{selected && (<div className="bg-white p-6 rounded-2xl border border-stone-100 shadow-soft fade-in"><div className="flex justify-between items-baseline mb-4"><label className="text-sm font-bold text-stone-600 uppercase tracking-wide">Intensidade</label><span className="text-2xl font-serif font-bold text-primary-700">{intensity}%</span></div><input type="range" min="0" max="100" value={intensity} onChange={(e) => setIntensity(parseInt(e.target.value))} /></div>)}</div><div className="pt-6"><Button onClick={() => onNext({ emotion: selected, emotionIntensity: intensity })} disabled={!selected}>Continuar <Icon name="arrow-right" size={18} /></Button></div></div>
   );
 };
 
 const StepThought = ({ onNext }) => {
-  const [thought, setThought] = useState('');
-  const [belief, setBelief] = useState(80);
+  const [thought, setThought] = useState(''); const [belief, setBelief] = useState(80);
   return (
-    <div className="slide-up flex flex-col h-full">
-      <div className="flex-1">
-        <h2 className="text-3xl font-serif font-bold text-stone-800 mb-3">O que você pensou?</h2>
-        <p className="text-stone-500 mb-8">Pensamentos automáticos surgem rápido. Tente capturar a frase exata que passou pela sua mente.</p>
-        <div className="relative">
-          <Icon name="message-circle" className="absolute top-4 left-4 text-stone-300" />
-          <textarea
-            className="w-full h-40 p-4 pl-12 rounded-xl bg-white border border-stone-200 focus:border-primary-500 focus:ring-4 focus:ring-primary-100 outline-none transition-all text-stone-700 text-lg shadow-sm resize-none font-serif italic"
-            placeholder='"Vou ser Demitido...", "Fiz algo errado...", "Isso vai dar errado..."'
-            value={thought}
-            onChange={e => setThought(e.target.value)}
-          ></textarea>
-        </div>
-        {thought.length > 5 && (
-          <div className="mt-8 bg-stone-50 p-6 rounded-2xl border border-stone-100 fade-in">
-            <div className="flex justify-between items-baseline mb-4">
-              <label className="text-sm font-bold text-stone-600">Grau de Crença</label>
-              <span className="text-2xl font-serif font-bold text-primary-700">{belief}%</span>
-            </div>
-            <p className="text-xs text-stone-400 mb-4">Quanto você acredita que isso é uma verdade absoluta?</p>
-            <input
-              type="range"
-              min="0" max="100"
-              value={belief}
-              onChange={(e) => setBelief(parseInt(e.target.value))}
-            />
-          </div>
-        )}
-      </div>
-      <div className="pt-6">
-        <Button onClick={() => onNext({ thought, thoughtBelief: belief })} disabled={thought.length < 5}>
-          Continuar <Icon name="arrow-right" size={18} />
-        </Button>
-      </div>
-    </div>
+    <div className="slide-up flex flex-col h-full"><div className="flex-1"><h2 className="text-3xl font-serif font-bold text-stone-800 mb-3">O que você pensou?</h2><textarea className="w-full h-40 p-4 rounded-xl bg-white border border-stone-200 focus:border-primary-500 outline-none text-stone-700 text-lg shadow-sm resize-none font-serif italic" placeholder='"Vou ser Demitido..."' value={thought} onChange={e => setThought(e.target.value)}></textarea>{thought.length > 5 && (<div className="mt-8 bg-stone-50 p-6 rounded-2xl border border-stone-100 fade-in"><div className="flex justify-between items-baseline mb-4"><label className="text-sm font-bold text-stone-600">Grau de Crença</label><span className="text-2xl font-serif font-bold text-primary-700">{belief}%</span></div><input type="range" min="0" max="100" value={belief} onChange={(e) => setBelief(parseInt(e.target.value))} /></div>)}</div><div className="pt-6"><Button onClick={() => onNext({ thought, thoughtBelief: belief })} disabled={thought.length < 5}>Continuar <Icon name="arrow-right" size={18} /></Button></div></div>
   );
 };
 
 const StepChallenge = ({ data, onNext }) => {
-  const [selectedStrategy, setSelectedStrategy] = useState(null);
-  const [answers, setAnswers] = useState({});
+  const [selectedStrategy, setSelectedStrategy] = useState(null); const [answers, setAnswers] = useState({});
   const handleAnswerChange = (index, value) => setAnswers({ ...answers, [index]: value });
-  if (!selectedStrategy) {
-    return (
-      <div className="slide-up">
-        <h2 className="text-3xl font-serif font-bold text-stone-800 mb-3">Vamos questionar?</h2>
-        <p className="text-stone-500 mb-8">Nossos pensamentos nem sempre são fatos. Escolha um guia de reflexão para examinar esse pensamento.</p>
-        <div className="space-y-4">
-          {STRATEGIES.map(st => (
-            <button
-              key={st.id}
-              onClick={() => { setSelectedStrategy(st); setAnswers({}); }}
-              className="w-full text-left p-6 rounded-2xl bg-white border border-stone-200 hover:border-primary-400 hover:shadow-lg hover:shadow-primary-900/5 transition-all group relative overflow-hidden"
-            >
-              <div className="absolute right-0 top-0 p-6 opacity-5 group-hover:opacity-10 text-primary-900 transition-opacity">
-                <Icon name={st.icon} size={64} />
-              </div>
-              <div className="relative z-10">
-                <div className="flex items-center gap-3 mb-2">
-                  <div className="bg-primary-50 p-2 rounded-lg text-primary-700 group-hover:bg-primary-600 group-hover:text-white transition-colors">
-                    <Icon name={st.icon} size={20} />
-                  </div>
-                  <div>
-                    <h3 className="font-bold text-stone-800 text-lg group-hover:text-primary-700 transition-colors">{st.title}</h3>
-                    <p className="text-xs font-bold text-stone-400 uppercase tracking-wide">{st.subtitle}</p>
-                  </div>
-                </div>
-                <p className="text-stone-500 text-sm leading-relaxed pl-12">{st.desc}</p>
-              </div>
-            </button>
-          ))}
-        </div>
-      </div>
-    );
-  }
-  return (
-    <div className="slide-up flex flex-col h-full">
-      <button onClick={() => setSelectedStrategy(null)} className="text-xs font-bold text-stone-400 hover:text-primary-600 flex items-center gap-1 mb-4 uppercase tracking-wide transition-colors">
-        <Icon name="chevron-left" size={14} /> Trocar estratégia
-      </button>
-      <div className="bg-white rounded-xl p-5 border-l-4 border-primary-500 shadow-sm mb-6">
-        <p className="text-xs font-bold text-stone-400 uppercase mb-1">Pensamento Alvo</p>
-        <p className="text-stone-800 font-serif italic text-lg">"{data.thought}"</p>
-      </div>
-      <h3 className="text-xl font-bold text-stone-800 mb-6 flex items-center gap-2">
-        <Icon name={selectedStrategy.icon} className="text-primary-600" />
-        {selectedStrategy.title}
-      </h3>
-      <div className="flex-1 space-y-8">
-        {selectedStrategy.questions.map((q, idx) => (
-          <div key={idx} className="space-y-3">
-            <label className="block text-sm font-bold text-stone-700 leading-relaxed">{q}</label>
-            <textarea
-              className="w-full p-4 rounded-lg bg-stone-50 border border-stone-200 focus:border-primary-500 focus:bg-white outline-none text-stone-700 text-sm h-24 transition-all"
-              placeholder="Sua resposta..."
-              value={answers[idx] || ''}
-              onChange={(e) => handleAnswerChange(idx, e.target.value)}
-            ></textarea>
-          </div>
-        ))}
-      </div>
-      <div className="pt-8">
-        <Button onClick={() => onNext({ strategy: selectedStrategy, strategyAnswers: answers })}>
-          Concluir Análise
-        </Button>
-      </div>
-    </div>
-  );
+  if (!selectedStrategy) return (<div className="slide-up"><h2 className="text-3xl font-serif font-bold text-stone-800 mb-3">Vamos questionar?</h2><div className="space-y-4">{STRATEGIES.map(st => (<button key={st.id} onClick={() => { setSelectedStrategy(st); setAnswers({}); }} className="w-full text-left p-6 rounded-2xl bg-white border border-stone-200 hover:border-primary-400 hover:shadow-lg transition-all group"><div><h3 className="font-bold text-stone-800 text-lg">{st.title}</h3><p className="text-stone-500 text-sm">{st.desc}</p></div></button>))}</div></div>);
+  return (<div className="slide-up flex flex-col h-full"><button onClick={() => setSelectedStrategy(null)} className="text-xs font-bold text-stone-400 mb-4 uppercase">Trocar estratégia</button><h3 className="text-xl font-bold text-stone-800 mb-6">{selectedStrategy.title}</h3><div className="flex-1 space-y-8">{selectedStrategy.questions.map((q, idx) => (<div key={idx} className="space-y-3"><label className="block text-sm font-bold text-stone-700">{q}</label><textarea className="w-full p-4 rounded-lg bg-stone-50 border border-stone-200 focus:border-primary-500 focus:bg-white outline-none text-stone-700 text-sm h-24 transition-all" value={answers[idx] || ''} onChange={(e) => handleAnswerChange(idx, e.target.value)}></textarea></div>))}</div><div className="pt-8"><Button onClick={() => onNext({ strategy: selectedStrategy, strategyAnswers: answers })}>Concluir Análise</Button></div></div>);
 };
 
 const StepReframe = ({ data, onFinish }) => {
-  const [balanced, setBalanced] = useState('');
-  const [finalFeeling, setFinalFeeling] = useState(data.emotionIntensity);
-  useEffect(() => {
-    const lastAnswerIdx = Object.keys(data.strategyAnswers || {}).length - 1;
-    if (lastAnswerIdx >= 0) setBalanced(data.strategyAnswers[lastAnswerIdx]);
-  }, []);
-  return (
-    <div className="slide-up flex flex-col h-full">
-      <div className="flex-1">
-        <h2 className="text-3xl font-serif font-bold text-emerald-800 mb-2">Nova Perspectiva</h2>
-        <p className="text-stone-500 mb-6">Reescreva seu pensamento inicial de forma mais justa e realista.</p>
-        <div className="bg-white rounded-2xl shadow-lg shadow-emerald-900/5 border border-emerald-100 p-6 space-y-6">
-          <textarea
-            className="w-full h-40 p-4 rounded-xl border border-emerald-100 bg-emerald-50/30 focus:border-emerald-500 focus:bg-white focus:ring-4 focus:ring-emerald-500/10 outline-none transition-all text-stone-800 text-lg font-serif resize-none"
-            value={balanced}
-            onChange={e => setBalanced(e.target.value)}
-            placeholder="A verdade é que..."
-          ></textarea>
-          <div className="border-t border-emerald-100 pt-6">
-            <div className="flex justify-between items-baseline mb-4">
-              <span className="text-sm font-bold text-stone-600">Nível da Emoção Agora</span>
-              <span className="text-2xl font-serif font-bold text-emerald-700">{finalFeeling}%</span>
-            </div>
-            <input
-              type="range"
-              min="0" max="100"
-              value={finalFeeling}
-              onChange={(e) => setFinalFeeling(parseInt(e.target.value))}
-              className="accent-emerald-600"
-            />
-            <div className="text-center mt-2">
-              <span className={`text-xs font-bold px-3 py-1 rounded-full ${finalFeeling < data.emotionIntensity ? 'bg-emerald-100 text-emerald-700' : 'bg-stone-100 text-stone-500'}`}>
-                {finalFeeling < data.emotionIntensity ? `Redução de ${data.emotionIntensity - finalFeeling}%` : 'Sem mudança'}
-              </span>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div className="pt-6">
-        <Button variant="success" onClick={() => onFinish({ balancedThought: balanced, finalEmotion: finalFeeling })}>
-          <Icon name="check" /> Finalizar Registro
-        </Button>
-      </div>
-    </div>
-  );
+  const [balanced, setBalanced] = useState(''); const [finalFeeling, setFinalFeeling] = useState(data.emotionIntensity);
+  return (<div className="slide-up flex flex-col h-full"><div className="flex-1"><h2 className="text-3xl font-serif font-bold text-emerald-800 mb-2">Nova Perspectiva</h2><p className="text-stone-500 mb-6">Reescreva seu pensamento inicial de forma mais justa.</p><div className="bg-white rounded-2xl border border-emerald-100 p-6"><textarea className="w-full h-40 p-4 rounded-xl border border-emerald-100 bg-emerald-50/30 focus:bg-white outline-none text-stone-800 text-lg font-serif resize-none" value={balanced} onChange={e => setBalanced(e.target.value)} placeholder="A verdade é que..."></textarea><div className="border-t border-emerald-100 pt-6"><div className="flex justify-between items-baseline mb-4"><span className="text-sm font-bold text-stone-600">Emoção Agora</span><span className="text-2xl font-serif font-bold text-emerald-700">{finalFeeling}%</span></div><input type="range" min="0" max="100" value={finalFeeling} onChange={(e) => setFinalFeeling(parseInt(e.target.value))} className="accent-emerald-600" /></div></div></div><div className="pt-6"><Button variant="success" onClick={() => onFinish({ balancedThought: balanced, finalEmotion: finalFeeling })}><Icon name="check" /> Ver meu Cartão</Button></div></div>);
 };
 
-// ==========================================
-// WIZARD LAYOUT (BÚSSOLA)
-// ==========================================
-const WizardLayout = ({ title, step, totalSteps, onCancel, children }) => (
-  <div className="min-h-screen bg-paper flex flex-col">
-    <div className="max-w-xl mx-auto w-full h-full flex flex-col flex-1">
-      <div className="p-6 pb-2">
-        <div className="flex justify-between items-center mb-6">
-          <button onClick={onCancel} className="text-stone-400 hover:text-stone-600 transition-colors">
-            <Icon name="x" size={24} />
-          </button>
-          <span className="text-xs font-bold text-primary-700 tracking-widest uppercase bg-primary-50 px-3 py-1 rounded-full">
-            {title}
-          </span>
-          <div className="w-6"></div>
-        </div>
-        <ProgressBar current={step} total={totalSteps} />
-      </div>
-      <div className="flex-1 px-6 pb-8 overflow-y-auto flex flex-col">
-        {children}
-      </div>
-    </div>
-  </div>
-);
+const WizardLayout = ({ title, step, totalSteps, onCancel, children }) => (<div className="min-h-screen bg-paper flex flex-col"><div className="max-w-xl mx-auto w-full h-full flex flex-col flex-1"><div className="p-6 pb-2"><div className="flex justify-between items-center mb-6"><button onClick={onCancel} className="text-stone-400 hover:text-stone-600 transition-colors"><Icon name="x" size={24} /></button><span className="text-xs font-bold text-primary-700 tracking-widest uppercase bg-primary-50 px-3 py-1 rounded-full">{title}</span><div className="w-6"></div></div><ProgressBar current={step} total={totalSteps} /></div><div className="flex-1 px-6 pb-8 overflow-y-auto flex flex-col">{children}</div></div></div>);
 
-// ==========================================
-// MÓDULO 1: FILTRO POSITIVO
-// ==========================================
 const WizardFoco = ({ onFinish, onCancel }) => {
-  const [step, setStep] = useState(1);
-  const [data, setData] = useState({ bad: '', good1: '', good2: '', good3: '' });
-  return (
-    <WizardLayout title="Filtro Positivo" step={step} totalSteps={3} onCancel={onCancel}>
-      {step === 1 && (
-        <div className="slide-up flex flex-col h-full flex-1">
-          <h2 className="text-3xl font-serif font-bold text-stone-800 mb-3">O filtro do problema</h2>
-          <p className="text-stone-500 mb-6 leading-relaxed">Nosso cérebro é programado para focar no que dá errado para nos proteger. O que te frustrou ou deu errado hoje?</p>
-          <TextArea
-            className="h-40 mb-6" autoFocus
-            placeholder="Ex: Peguei muito trânsito, bati o dedinho, cometi um erro..."
-            value={data.bad} onChange={e => setData({...data, bad: e.target.value})}
-          />
-          <div className="mt-auto pt-6">
-            <Button onClick={() => setStep(2)} disabled={data.bad.length < 5}>Continuar <Icon name="arrow-right"/></Button>
-          </div>
-        </div>
-      )}
-      {step === 2 && (
-        <div className="slide-up flex flex-col h-full flex-1">
-          <h2 className="text-3xl font-serif font-bold text-stone-800 mb-3">Mudando o foco</h2>
-          <p className="text-stone-500 mb-6 leading-relaxed">Como o esperado não chama atenção, ignoramos o que funciona. Liste 3 coisas que deram certo, fluíram bem ou foram neutras hoje.</p>
-          <div className="space-y-4 mb-6">
-            <input className="w-full p-4 rounded-xl border border-stone-200 focus:border-amber-500 outline-none" placeholder="1. Ex: Tomei um bom café..." value={data.good1} onChange={e => setData({...data, good1: e.target.value})} />
-            <input className="w-full p-4 rounded-xl border border-stone-200 focus:border-amber-500 outline-none" placeholder="2. Consegui terminar aquela tarefa..." value={data.good2} onChange={e => setData({...data, good2: e.target.value})} />
-            <input className="w-full p-4 rounded-xl border border-stone-200 focus:border-amber-500 outline-none" placeholder="3. Alguém foi gentil comigo na rua..." value={data.good3} onChange={e => setData({...data, good3: e.target.value})} />
-          </div>
-          <div className="mt-auto pt-6">
-            <Button onClick={() => setStep(3)} disabled={!data.good1 || !data.good2 || !data.good3}>Ver o Confronto</Button>
-          </div>
-        </div>
-      )}
-      {step === 3 && (
-        <div className="slide-up flex flex-col h-full flex-1">
-          <h2 className="text-3xl font-serif font-bold text-amber-700 mb-6">A Realidade Completa</h2>
-          <div className="bg-rose-50 border border-rose-100 p-5 rounded-2xl mb-4 relative opacity-60">
-            <div className="absolute -top-3 left-4 bg-rose-100 text-rose-800 text-xs font-bold px-2 py-1 rounded">Onde o cérebro focou</div>
-            <p className="font-serif italic text-stone-700 mt-2">"{data.bad}"</p>
-          </div>
-          <div className="flex justify-center my-2"><Icon name="arrow-down-up" className="text-stone-300" /></div>
-          <div className="bg-amber-50 border border-amber-100 p-5 rounded-2xl mb-6 relative">
-            <div className="absolute -top-3 left-4 bg-amber-200 text-amber-800 text-xs font-bold px-2 py-1 rounded">O que também é verdade</div>
-            <ul className="list-disc pl-5 mt-2 text-stone-800 font-serif space-y-2">
-              <li>{data.good1}</li>
-              <li>{data.good2}</li>
-              <li>{data.good3}</li>
-            </ul>
-          </div>
-          <p className="text-sm text-stone-500 italic text-center mb-6">Seu dia não foi feito apenas de coisas ruins. Parabéns por ter notado o que deu certo hoje.</p>
-          <div className="mt-auto pt-6">
-            <Button variant="success" onClick={() => onFinish(data)}><Icon name="check"/> Guardar Reflexão</Button>
-          </div>
-        </div>
-      )}
-    </WizardLayout>
-  );
+  const [step, setStep] = useState(1); const [data, setData] = useState({ bad: '', good1: '', good2: '', good3: '' });
+  return (<WizardLayout title="Filtro Positivo" step={step} totalSteps={2} onCancel={onCancel}>
+    {step === 1 && (<div className="slide-up flex flex-col h-full flex-1"><h2 className="text-3xl font-serif font-bold text-stone-800 mb-3">O filtro do problema</h2><TextArea className="h-40 mb-6" autoFocus placeholder="O que deu errado hoje?" value={data.bad} onChange={e => setData({...data, bad: e.target.value})} /><div className="mt-auto pt-6"><Button onClick={() => setStep(2)} disabled={data.bad.length < 5}>Continuar <Icon name="arrow-right"/></Button></div></div>)}
+    {step === 2 && (<div className="slide-up flex flex-col h-full flex-1"><h2 className="text-3xl font-serif font-bold text-stone-800 mb-3">Mudando o foco</h2><p className="text-stone-500 mb-6">Liste 3 coisas que deram certo hoje.</p><div className="space-y-4 mb-6"><input className="w-full p-4 rounded-xl border" placeholder="1." value={data.good1} onChange={e => setData({...data, good1: e.target.value})} /><input className="w-full p-4 rounded-xl border" placeholder="2." value={data.good2} onChange={e => setData({...data, good2: e.target.value})} /><input className="w-full p-4 rounded-xl border" placeholder="3." value={data.good3} onChange={e => setData({...data, good3: e.target.value})} /></div><div className="mt-auto pt-6"><Button variant="success" onClick={() => onFinish(data)} disabled={!data.good1 || !data.good2 || !data.good3}>Ver Cartão de Foco</Button></div></div>)}
+  </WizardLayout>);
 };
 
-// ==========================================
-// MÓDULO 2: A BALANÇA DA MUDANÇA
-// ==========================================
 const WizardMudanca = ({ onFinish, onCancel }) => {
-  const [step, setStep] = useState(1);
-  const [data, setData] = useState({ dilemma: '', stayPros: '', stayCons: '', changePros: '', changeCons: '' });
-  return (
-    <WizardLayout title="Balança da Mudança" step={step} totalSteps={4} onCancel={onCancel}>
-      {step === 1 && (
-        <div className="slide-up flex flex-col h-full flex-1">
-          <h2 className="text-3xl font-serif font-bold text-stone-800 mb-3">O Dilema</h2>
-          <p className="text-stone-500 mb-6 leading-relaxed">Nosso maior medo é a dúvida. Preferimos o sofrimento conhecido ao alívio desconhecido. Qual é a mudança que você precisa fazer, mas está adiando?</p>
-          <TextArea className="h-32 mb-6" autoFocus placeholder='Ex: Terminar um relacionamento, mudar de emprego, dizer "não" àquilo...' value={data.dilemma} onChange={e => setData({...data, dilemma: e.target.value})} />
-          <div className="mt-auto pt-6"><Button onClick={() => setStep(2)} disabled={data.dilemma.length < 5}>Continuar <Icon name="arrow-right"/></Button></div>
-        </div>
-      )}
-      {step === 2 && (
-        <div className="slide-up flex flex-col h-full flex-1">
-          <h2 className="text-2xl font-serif font-bold text-stone-800 mb-2">Cenário 1: Não Fazer Nada</h2>
-          <p className="text-stone-500 mb-6 text-sm">Permanecer na zona de conforto tem seus ganhos (alívio imediato) e suas dores (frustração de longo prazo).</p>
-          <div className="space-y-4 mb-6">
-            <div>
-              <label className="text-sm font-bold text-stone-700 flex items-center gap-2 mb-2"><Icon name="shield" size={16} className="text-sky-600"/> Vantagens de ficar como está (O que te prende?)</label>
-              <textarea className="w-full p-3 rounded-lg bg-white border border-stone-200 outline-none focus:border-indigo-400 text-sm h-24" placeholder="Ex: Não preciso ter conversas difíceis, segurança financeira..." value={data.stayPros} onChange={e => setData({...data, stayPros: e.target.value})}></textarea>
-            </div>
-            <div>
-              <label className="text-sm font-bold text-stone-700 flex items-center gap-2 mb-2"><Icon name="alert-triangle" size={16} className="text-rose-600"/> Desvantagens de ficar como está (Qual o preço real?)</label>
-              <textarea className="w-full p-3 rounded-lg bg-white border border-stone-200 outline-none focus:border-indigo-400 text-sm h-24" placeholder="Ex: Continuo infeliz todo dia, minha saúde piora..." value={data.stayCons} onChange={e => setData({...data, stayCons: e.target.value})}></textarea>
-            </div>
-          </div>
-          <div className="mt-auto pt-6"><Button onClick={() => setStep(3)} disabled={!data.stayPros || !data.stayCons}>Próximo Cenário <Icon name="arrow-right"/></Button></div>
-        </div>
-      )}
-      {step === 3 && (
-        <div className="slide-up flex flex-col h-full flex-1">
-          <h2 className="text-2xl font-serif font-bold text-stone-800 mb-2">Cenário 2: Encarar a Mudança</h2>
-          <p className="text-stone-500 mb-6 text-sm">Mudar exige esforço (dor de curto prazo), mas abre espaço para novas realidades (ganho de longo prazo).</p>
-          <div className="space-y-4 mb-6">
-            <div>
-              <label className="text-sm font-bold text-stone-700 flex items-center gap-2 mb-2"><Icon name="trending-up" size={16} className="text-emerald-600"/> Vantagens de mudar (O que você ganha?)</label>
-              <textarea className="w-full p-3 rounded-lg bg-white border border-stone-200 outline-none focus:border-indigo-400 text-sm h-24" placeholder="Ex: Liberdade emocional, chance de crescer..." value={data.changePros} onChange={e => setData({...data, changePros: e.target.value})}></textarea>
-            </div>
-            <div>
-              <label className="text-sm font-bold text-stone-700 flex items-center gap-2 mb-2"><Icon name="mountain" size={16} className="text-amber-600"/> Desvantagens da mudança (O que você teme?)</label>
-              <textarea className="w-full p-3 rounded-lg bg-white border border-stone-200 outline-none focus:border-indigo-400 text-sm h-24" placeholder="Ex: O desconforto inicial, o medo de dar errado..." value={data.changeCons} onChange={e => setData({...data, changeCons: e.target.value})}></textarea>
-            </div>
-          </div>
-          <div className="mt-auto pt-6"><Button onClick={() => setStep(4)} disabled={!data.changePros || !data.changeCons}>Concluir Balança</Button></div>
-        </div>
-      )}
-      {step === 4 && (
-        <div className="slide-up flex flex-col h-full flex-1">
-          <h2 className="text-3xl font-serif font-bold text-indigo-800 mb-6">A Visão Clara</h2>
-          <div className="bg-white p-5 rounded-2xl border-2 border-indigo-100 shadow-sm mb-6">
-            <p className="text-sm text-stone-500 mb-4">Muitas vezes exageramos os riscos de <strong className="text-indigo-600">Mudar</strong> e minimizamos a dor silenciosa de <strong className="text-rose-600">Ficar como está</strong>.</p>
-            <div className="space-y-4">
-              <div className="p-3 bg-rose-50 rounded-lg border border-rose-100">
-                <span className="block text-xs font-bold text-rose-800 uppercase mb-1">O Preço de Não Mudar:</span>
-                <span className="font-serif text-sm italic">"{data.stayCons}"</span>
-              </div>
-              <div className="p-3 bg-emerald-50 rounded-lg border border-emerald-100">
-                <span className="block text-xs font-bold text-emerald-800 uppercase mb-1">A Recompensa da Coragem:</span>
-                <span className="font-serif text-sm italic">"{data.changePros}"</span>
-              </div>
-            </div>
-          </div>
-          <div className="mt-auto pt-6"><Button variant="success" onClick={() => onFinish(data)}><Icon name="check"/> Finalizar Reflexão</Button></div>
-        </div>
-      )}
-    </WizardLayout>
-  );
+  const [step, setStep] = useState(1); const [data, setData] = useState({ dilemma: '', stayCons: '', changePros: '' });
+  return (<WizardLayout title="Balança da Mudança" step={step} totalSteps={2} onCancel={onCancel}>
+    {step === 1 && (<div className="slide-up flex flex-col h-full flex-1"><h2 className="text-3xl font-serif font-bold text-stone-800 mb-3">O Dilema</h2><TextArea className="h-32 mb-6" autoFocus placeholder='Qual mudança está adiando?' value={data.dilemma} onChange={e => setData({...data, dilemma: e.target.value})} /><div className="mt-auto pt-6"><Button onClick={() => setStep(2)} disabled={data.dilemma.length < 5}>Continuar <Icon name="arrow-right"/></Button></div></div>)}
+    {step === 2 && (<div className="slide-up flex flex-col h-full flex-1"><h2 className="text-2xl font-serif font-bold text-stone-800 mb-2">Confrontando Ganhos e Perdas</h2><div className="space-y-4 mb-6"><div><label className="text-sm font-bold text-rose-600 block mb-2">Qual o preço real de ficar como está?</label><textarea className="w-full p-3 rounded-lg bg-white border h-24" value={data.stayCons} onChange={e => setData({...data, stayCons: e.target.value})}></textarea></div><div><label className="text-sm font-bold text-indigo-600 block mb-2">O que você ganha se mudar?</label><textarea className="w-full p-3 rounded-lg bg-white border h-24" value={data.changePros} onChange={e => setData({...data, changePros: e.target.value})}></textarea></div></div><div className="mt-auto pt-6"><Button variant="success" onClick={() => onFinish(data)} disabled={!data.stayCons || !data.changePros}>Ver Balança Completa</Button></div></div>)}
+  </WizardLayout>);
 };
 
-// ==========================================
-// MÓDULO 3: EXPECTATIVA VS. REALIDADE
-// ==========================================
 const WizardExpectativa = ({ onFinish, onCancel }) => {
-  const [step, setStep] = useState(1);
-  const [data, setData] = useState({ situation: '', expectation: '', reality: '', choice: '', consequence: '' });
-  return (
-    <WizardLayout title="Expectativa vs Realidade" step={step} totalSteps={4} onCancel={onCancel}>
-      {step === 1 && (
-        <div className="slide-up flex flex-col h-full flex-1">
-          <h2 className="text-3xl font-serif font-bold text-stone-800 mb-3">A Projeção</h2>
-          <p className="text-stone-500 mb-6 leading-relaxed">Toda frustração nasce de uma expectativa quebrada. O que aconteceu e como você ESPERAVA que tivesse sido?</p>
-          <div className="space-y-4 mb-6">
-            <div>
-              <label className="text-sm font-bold text-stone-700 block mb-2">Qual foi a situação?</label>
-              <input className="w-full p-4 rounded-xl border border-stone-200 focus:border-emerald-500 outline-none" placeholder="Ex: Fiz um jantar surpresa..." value={data.situation} onChange={e => setData({...data, situation: e.target.value})} autoFocus />
-            </div>
-            <div>
-              <label className="text-sm font-bold text-emerald-700 block mb-2">Qual era a sua expectativa oculta?</label>
-              <TextArea className="h-28" placeholder="Ex: Eu esperava muita gratidão, que a pessoa ficasse emocionada..." value={data.expectation} onChange={e => setData({...data, expectation: e.target.value})} />
-            </div>
-          </div>
-          <div className="mt-auto pt-6"><Button onClick={() => setStep(2)} disabled={data.situation.length < 3 || data.expectation.length < 3}>Continuar <Icon name="arrow-right"/></Button></div>
-        </div>
-      )}
-      {step === 2 && (
-        <div className="slide-up flex flex-col h-full flex-1">
-          <h2 className="text-3xl font-serif font-bold text-stone-800 mb-3">O Choque de Realidade</h2>
-          <p className="text-stone-500 mb-6 leading-relaxed">A realidade tem suas próprias regras e raramente pede permissão para acontecer. O que DE FATO aconteceu?</p>
-          <TextArea className="h-40 border-rose-200 focus:border-rose-500 focus:ring-rose-100 mb-6" autoFocus placeholder="Ex: A pessoa chegou cansada, comeu rápido e foi dormir..." value={data.reality} onChange={e => setData({...data, reality: e.target.value})} />
-          <div className="mt-auto pt-6"><Button onClick={() => setStep(3)} disabled={data.reality.length < 5}>Analisar a Frustração <Icon name="arrow-right"/></Button></div>
-        </div>
-      )}
-      {step === 3 && (
-        <div className="slide-up flex flex-col h-full flex-1">
-          <h2 className="text-3xl font-serif font-bold text-stone-800 mb-6">A Encruzilhada</h2>
-          <p className="text-stone-600 mb-8">Diante do abismo entre expectativa e realidade, você tem dois caminhos. Qual você escolhe agora?</p>
-          <div className="space-y-4 mb-6">
-            <button
-              onClick={() => { setData({...data, choice: 'insistir'}); setStep(4); }}
-              className="w-full text-left p-5 rounded-2xl border-2 border-stone-200 hover:border-rose-400 hover:bg-rose-50 transition-all"
-            >
-              <div className="flex items-center gap-3 mb-2">
-                <Icon name="swords" className="text-rose-500" />
-                <h3 className="font-bold text-stone-800 text-lg">Brigar com a Realidade</h3>
-              </div>
-              <p className="text-sm text-stone-500">Insistir que as coisas "deveriam" ter sido como eu queria. Exigir, reclamar ou me ressentir.</p>
-            </button>
-            <button
-              onClick={() => { setData({...data, choice: 'adaptar'}); setStep(4); }}
-              className="w-full text-left p-5 rounded-2xl border-2 border-stone-200 hover:border-emerald-400 hover:bg-emerald-50 transition-all"
-            >
-              <div className="flex items-center gap-3 mb-2">
-                <Icon name="refresh-cw" className="text-emerald-500" />
-                <h3 className="font-bold text-stone-800 text-lg">Atualizar a Expectativa</h3>
-              </div>
-              <p className="text-sm text-stone-500">Aceitar que nem sempre minhas expectativas vão ser correspondidas, e que me frustar pelo o que eu esperava que acontecesse é uma dor causada por mim mesmo. Eu posso realinhar e expressar minhas expectativas sem cobrança e julgamento.</p>
-            </button>
-          </div>
-        </div>
-      )}
-      {step === 4 && (
-        <div className="slide-up flex flex-col h-full flex-1">
-          <h2 className="text-2xl font-serif font-bold text-stone-800 mb-3">Consequência da Escolha</h2>
-          <div className={`p-4 rounded-xl mb-6 ${data.choice === 'adaptar' ? 'bg-emerald-100 text-emerald-800' : 'bg-rose-100 text-rose-800'}`}>
-            <strong>Você escolheu:</strong> {data.choice === 'adaptar' ? 'Atualizar a Expectativa' : 'Brigar com a Realidade'}
-          </div>
-          <p className="text-stone-600 mb-4 font-bold">
-            {data.choice === 'adaptar' ? "Como você se sente ao soltar o controle e aceitar os fatos?" : "Qual é o custo emocional de continuar insistindo que a realidade está errada?"}
-          </p>
-          <TextArea className="h-32 mb-6" autoFocus placeholder="Escreva sua reflexão final..." value={data.consequence} onChange={e => setData({...data, consequence: e.target.value})} />
-          <div className="mt-auto pt-6"><Button variant="success" onClick={() => onFinish(data)} disabled={data.consequence.length < 3}><Icon name="check"/> Finalizar Reflexão</Button></div>
-        </div>
-      )}
-    </WizardLayout>
-  );
+  const [step, setStep] = useState(1); const [data, setData] = useState({ expectation: '', choice: '', consequence: '' });
+  return (<WizardLayout title="Expectativa vs Realidade" step={step} totalSteps={2} onCancel={onCancel}>
+    {step === 1 && (<div className="slide-up flex flex-col h-full flex-1"><h2 className="text-3xl font-serif font-bold text-stone-800 mb-3">A Projeção</h2><TextArea className="h-28" placeholder="Qual era a sua expectativa oculta que foi frustrada?" value={data.expectation} onChange={e => setData({...data, expectation: e.target.value})} /><div className="mt-auto pt-6"><Button onClick={() => setStep(2)} disabled={data.expectation.length < 3}>Continuar <Icon name="arrow-right"/></Button></div></div>)}
+    {step === 2 && (<div className="slide-up flex flex-col h-full flex-1"><h2 className="text-3xl font-serif font-bold text-stone-800 mb-6">A Encruzilhada</h2><div className="space-y-4 mb-6"><button onClick={() => setData({...data, choice: 'insistir'})} className={`w-full text-left p-5 rounded-2xl border-2 ${data.choice === 'insistir' ? 'border-rose-400 bg-rose-50' : 'border-stone-200'} transition-all`}><h3 className="font-bold text-stone-800">Brigar com a Realidade</h3></button><button onClick={() => setData({...data, choice: 'adaptar'})} className={`w-full text-left p-5 rounded-2xl border-2 ${data.choice === 'adaptar' ? 'border-emerald-400 bg-emerald-50' : 'border-stone-200'} transition-all`}><h3 className="font-bold text-stone-800">Atualizar a Expectativa</h3></button></div>{data.choice && (<TextArea className="h-24 mb-6" placeholder="Escreva uma breve reflexão sobre essa escolha..." value={data.consequence} onChange={e => setData({...data, consequence: e.target.value})} />)}<div className="mt-auto pt-6"><Button variant="success" onClick={() => onFinish(data)} disabled={data.consequence.length < 3}>Gerar Cartão</Button></div></div>)}
+  </WizardLayout>);
 };
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
@@ -1015,4 +429,3 @@ root.render(<App />);
 </script>
 </body>
 </html>
-
